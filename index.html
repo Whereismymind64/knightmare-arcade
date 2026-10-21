@@ -565,7 +565,10 @@
       </div>
 
       <div class="footer">
-        WHERE IS MY MIND // RETRO ARCADE 1989
+        <div>WHERE IS MY MIND // RETRO ARCADE 1989</div>
+        <div style="margin-top:6px; color:#554370; font-size:7px; line-height:1.4;">
+          🔊 Если нет звука: выключите беззвучный режим (рычажок сбоку на iPhone)
+        </div>
       </div>
     </div>
 
@@ -778,7 +781,7 @@
     function openGame(gameId) {
       ensureAudio();
       tgHaptic('light');
-      playTone(520, 'square', 0.05, 0.15);
+      playTone(520, 'square', 0.05, 0.35);
 
       document.querySelectorAll('.screen-pane').forEach(p => p.classList.remove('active'));
       const targetScreen = document.getElementById(`screen-${gameId}`);
@@ -792,7 +795,7 @@
     function openHub() {
       ensureAudio();
       tgHaptic('light');
-      playTone(330, 'square', 0.05, 0.15);
+      playTone(330, 'square', 0.05, 0.35);
 
       // Stop running loops
       if (snRunning) pauseSnake();
@@ -811,28 +814,55 @@
     }
 
     // --- 8-BIT AUDIO SYNTHESIZER ---
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     let actx = null;
     let masterGain = null;
     let bassBoostNode = null;
     let isBassBoosted = false;
 
     function ensureAudio() {
-      if (!actx) {
-        actx = new AudioContext();
-        masterGain = actx.createGain();
-        masterGain.gain.setValueAtTime(0.7, actx.currentTime);
+      if (!actx && AudioContextClass) {
+        try {
+          actx = new AudioContextClass();
+          masterGain = actx.createGain();
+          masterGain.gain.setValueAtTime(0.9, actx.currentTime);
 
-        bassBoostNode = actx.createBiquadFilter();
-        bassBoostNode.type = 'lowshelf';
-        bassBoostNode.frequency.setValueAtTime(110, actx.currentTime);
-        bassBoostNode.gain.setValueAtTime(0, actx.currentTime);
+          bassBoostNode = actx.createBiquadFilter();
+          bassBoostNode.type = 'lowshelf';
+          bassBoostNode.frequency.setValueAtTime(110, actx.currentTime);
+          bassBoostNode.gain.setValueAtTime(0, actx.currentTime);
 
-        bassBoostNode.connect(masterGain);
-        masterGain.connect(actx.destination);
+          bassBoostNode.connect(masterGain);
+          masterGain.connect(actx.destination);
+        } catch(e) {
+          console.warn('AudioContext error:', e);
+        }
       }
-      if (actx.state === 'suspended') actx.resume();
+      if (actx && actx.state === 'suspended') {
+        actx.resume().catch(() => {});
+      }
     }
+
+    // Global unlock for iOS / Android on any initial touch
+    function unlockMobileAudio() {
+      ensureAudio();
+      if (actx) {
+        if (actx.state === 'suspended') {
+          actx.resume().catch(() => {});
+        }
+        try {
+          const buf = actx.createBuffer(1, 1, 22050);
+          const src = actx.createBufferSource();
+          src.buffer = buf;
+          src.connect(actx.destination);
+          src.start(0);
+        } catch(e) {}
+      }
+    }
+
+    ['touchstart', 'touchend', 'pointerdown', 'click'].forEach(evt => {
+      document.addEventListener(evt, unlockMobileAudio, { passive: true });
+    });
 
     function toggleBassBoost() {
       ensureAudio();
@@ -840,7 +870,7 @@
       isBassBoosted = !isBassBoosted;
       const btn = document.getElementById('bassBoostBtn');
       if (isBassBoosted) {
-        bassBoostNode.gain.setValueAtTime(15, actx.currentTime);
+        bassBoostNode.gain.setValueAtTime(16, actx.currentTime);
         btn.textContent = '🔊 BASS: ON 🔥';
         btn.style.background = '#ff0055';
       } else {
@@ -850,33 +880,59 @@
       }
     }
 
-    function playTone(freq, type = 'square', duration = 0.08, gainVal = 0.2) {
+    function playTone(freq, type = 'square', duration = 0.08, gainVal = 0.4) {
       ensureAudio();
-      const osc = actx.createOscillator();
-      const gain = actx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, actx.currentTime);
-      gain.gain.setValueAtTime(gainVal, actx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + duration);
-      osc.connect(gain);
-      gain.connect(bassBoostNode || masterGain);
-      osc.start();
-      osc.stop(actx.currentTime + duration);
+      if (!actx) return;
+      if (actx.state === 'suspended') {
+        actx.resume().then(() => _rawTone(freq, type, duration, gainVal)).catch(() => {});
+        return;
+      }
+      _rawTone(freq, type, duration, gainVal);
+    }
+
+    function _rawTone(freq, type, duration, gainVal) {
+      try {
+        const osc = actx.createOscillator();
+        const gain = actx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, actx.currentTime);
+        gain.gain.setValueAtTime(gainVal, actx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(bassBoostNode || masterGain);
+        osc.start();
+        osc.stop(actx.currentTime + duration);
+      } catch(e) {}
     }
 
     function playBonk(isCrit = false) {
       ensureAudio();
-      const osc = actx.createOscillator();
-      const gain = actx.createGain();
-      osc.type = isCrit ? 'sawtooth' : 'square';
-      osc.frequency.setValueAtTime(isCrit ? 580 : 340, actx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(isCrit ? 80 : 50, actx.currentTime + 0.12);
-      gain.gain.setValueAtTime(isCrit ? 0.55 : 0.35, actx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + 0.12);
-      osc.connect(gain);
-      gain.connect(bassBoostNode || masterGain);
-      osc.start();
-      osc.stop(actx.currentTime + 0.12);
+      if (!actx) return;
+      if (actx.state === 'suspended') {
+        actx.resume().then(() => _rawBonk(isCrit)).catch(() => {});
+        return;
+      }
+      _rawBonk(isCrit);
+    }
+
+    function _rawBonk(isCrit) {
+      try {
+        const osc = actx.createOscillator();
+        const gain = actx.createGain();
+        osc.type = isCrit ? 'sawtooth' : 'square';
+        osc.frequency.setValueAtTime(isCrit ? 600 : 360, actx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(isCrit ? 90 : 60, actx.currentTime + 0.12);
+        gain.gain.setValueAtTime(isCrit ? 0.7 : 0.5, actx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + 0.12);
+        osc.connect(gain);
+        gain.connect(bassBoostNode || masterGain);
+        osc.start();
+        osc.stop(actx.currentTime + durationBonk(isCrit));
+      } catch(e) {}
+    }
+
+    function durationBonk(isCrit) {
+      return isCrit ? 0.14 : 0.12;
     }
 
     // ========================================================
@@ -965,7 +1021,7 @@
 
       if (head.x === snFood.x && head.y === snFood.y) {
         tgHaptic('medium');
-        playTone(480 + Math.min(snake.length * 20, 600), 'square', 0.08, 0.25);
+        playTone(480 + Math.min(snake.length * 20, 600), 'square', 0.09, 0.5);
         snScore += snFood.points;
         for (let i = 1; i < snFood.grow; i++) {
           snake.push({ ...snake[snake.length - 1] });
@@ -1039,7 +1095,7 @@
       snRunning = false;
       clearInterval(snInterval);
       tgHaptic('error');
-      playTone(130, 'sawtooth', 0.4, 0.3);
+      playTone(130, 'sawtooth', 0.45, 0.55);
 
       if (snScore > snBest) {
         snBest = snScore;
@@ -1164,7 +1220,7 @@
 
       if (smCurHp <= 0) {
         tgHaptic('success');
-        playTone(660, 'square', 0.2, 0.35);
+        playTone(660, 'square', 0.2, 0.5);
         smElo += 50;
         smBossIndex = (smBossIndex + 1) % smBosses.length;
         smMaxHp = smBosses[smBossIndex].hp;
@@ -1177,8 +1233,8 @@
     function triggerVictory() {
       hasWon = true;
       tgHaptic('success');
-      playTone(880, 'square', 0.4, 0.4);
-      setTimeout(() => playTone(1174, 'square', 0.5, 0.4), 250);
+      playTone(880, 'square', 0.4, 0.55);
+      setTimeout(() => playTone(1174, 'square', 0.5, 0.55), 250);
       document.getElementById('winModal').classList.add('active');
     }
 
@@ -1213,7 +1269,7 @@
       if (smElo >= cost) {
         tgHaptic('success');
         smElo -= cost;
-        playTone(520, 'square', 0.12, 0.2);
+        playTone(520, 'square', 0.12, 0.45);
         if (type === 'fork') {
           smBonusDmg += 1;
           smCosts.fork = Math.floor(smCosts.fork * 1.8);
@@ -1226,7 +1282,7 @@
         updateSmasherUI();
       } else {
         tgHaptic('error');
-        playTone(140, 'sawtooth', 0.12, 0.2);
+        playTone(140, 'sawtooth', 0.12, 0.45);
       }
     }
 
@@ -1529,7 +1585,7 @@
 
       let ticks = 0;
       const tickInt = setInterval(() => {
-        playTone(320 + Math.random() * 320, 'square', 0.04, 0.1);
+        playTone(320 + Math.random() * 320, 'square', 0.04, 0.35);
         t1.textContent = excuses1[Math.floor(Math.random() * excuses1.length)];
         t2.textContent = excuses2[Math.floor(Math.random() * excuses2.length)];
         t3.textContent = excuses3[Math.floor(Math.random() * excuses3.length)];
@@ -1541,7 +1597,7 @@
           r3.classList.remove('rolling');
           isSpinning = false;
           tgHaptic('success');
-          playTone(660, 'square', 0.2, 0.3);
+          playTone(660, 'square', 0.25, 0.55);
         }
       }, 70);
     }
