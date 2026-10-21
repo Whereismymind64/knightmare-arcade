@@ -38,6 +38,7 @@
       position: relative;
     }
 
+    /* Subtle CRT Scanline overlay */
     body::before {
       content: " ";
       display: block;
@@ -52,103 +53,53 @@
 
     .hub-container {
       width: 100%;
-      max-width: 600px;
+      max-width: 520px;
       background: #110d1c;
       border: 4px solid #ff0055;
       box-shadow: 0 0 0 4px #000, 0 0 25px rgba(255, 0, 85, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.8);
-      padding: 14px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
+      min-height: 85vh;
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 14px;
+    /* Top bar inside individual games */
+    .game-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       width: 100%;
-      border-bottom: 4px solid #281d3d;
-      padding-bottom: 12px;
-      position: relative;
+      margin-bottom: 14px;
+      border-bottom: 3px solid #281d3d;
+      padding-bottom: 10px;
     }
 
-    .title {
-      font-size: clamp(14px, 4vw, 20px);
+    .back-btn {
+      background: #241a38;
       color: #ffe600;
-      text-transform: uppercase;
-      text-shadow: 3px 3px 0 #ff0055, -2px -2px 0 #000;
-      letter-spacing: 1px;
-      line-height: 1.4;
+      border: 2px solid #ff0055;
+      padding: 8px 12px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      cursor: pointer;
+      box-shadow: inset -2px -2px 0 #000, inset 2px 2px 0 #ff6699, 2px 2px 0 #000;
     }
 
-    .subtitle {
-      font-family: 'VT323', monospace;
-      font-size: 16px;
+    .back-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    .game-top-title {
+      font-size: 10px;
       color: #00e5ff;
-      letter-spacing: 2px;
-      margin-top: 4px;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    .tg-share-btn {
-      position: absolute;
-      right: 0;
-      top: -4px;
-      background: #ffe600;
-      color: #000;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      padding: 6px 8px;
-      border: 2px solid #000;
-      box-shadow: 2px 2px 0 #ff0055;
-      cursor: pointer;
-    }
-
-    .tg-share-btn:active {
-      transform: translate(1px, 1px);
-      box-shadow: 1px 1px 0 #ff0055;
-    }
-
-    .nav-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      width: 100%;
-      justify-content: center;
-      margin-bottom: 14px;
-    }
-
-    .tab-btn {
-      background: #1f1730;
-      color: #9f8fc2;
-      border: 2px solid #3c2a5c;
-      padding: 8px 10px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: inset -2px -2px 0 #0d0917, inset 2px 2px 0 #31234a, 2px 2px 0 #000;
-    }
-
-    .tab-btn.active {
-      background: #ff0055;
-      color: #fff;
-      border-color: #ffe600;
-      box-shadow: inset 2px 2px 0 #8b002e, inset -2px -2px 0 #ff6699, 2px 2px 0 #000;
-      text-shadow: 1px 1px 0 #000;
-    }
-
-    .tab-pane {
-      display: none;
-      width: 100%;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .tab-pane.active {
-      display: flex;
-    }
-
+    /* Common Pixel Button */
     .pixel-btn {
       background: #ff0055;
       color: #ffffff;
@@ -167,10 +118,103 @@
       transform: translate(2px, 2px);
     }
 
-    /* MODULE 1: CHESS SNAKE */
+    /* Screen Panes (SPA navigation) */
+    .screen-pane {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .screen-pane.active {
+      display: flex;
+    }
+
+    /* ==============================================
+       SCREEN: MAIN HUB MENU
+    ============================================== */
+    .hub-header {
+      text-align: center;
+      margin-bottom: 24px;
+      width: 100%;
+    }
+
+    .hub-title {
+      font-size: clamp(16px, 5vw, 24px);
+      color: #ffe600;
+      text-transform: uppercase;
+      text-shadow: 3px 3px 0 #ff0055, -2px -2px 0 #000;
+      letter-spacing: 2px;
+      line-height: 1.4;
+    }
+
+    .hub-subtitle {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      color: #00e5ff;
+      letter-spacing: 2px;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    .menu-cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .menu-card {
+      background: #171026;
+      border: 3px solid #3c2a5c;
+      padding: 14px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: inset -3px -3px 0 #0a0712, inset 3px 3px 0 #281d3d, 3px 3px 0 #000;
+      transition: none;
+    }
+
+    .menu-card:active {
+      border-color: #ffe600;
+      background: #ff0055;
+      box-shadow: inset 3px 3px 0 #8b002e, 1px 1px 0 #000;
+      transform: translate(2px, 2px);
+    }
+
+    .menu-card:active .menu-card-title { color: #fff; text-shadow: 1px 1px 0 #000; }
+    .menu-card:active .menu-card-desc { color: #ffe600; }
+
+    .menu-card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: left;
+    }
+
+    .menu-card-title {
+      font-size: 11px;
+      color: #ffe600;
+      letter-spacing: 0.5px;
+    }
+
+    .menu-card-desc {
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      color: #9f8fc2;
+    }
+
+    .menu-card-arrow {
+      font-size: 14px;
+      color: #00ff66;
+    }
+
+    /* ==============================================
+       SCREEN: CHESS SNAKE
+    ============================================== */
     .snake-game-wrap {
       width: 100%;
-      max-width: 440px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -249,38 +293,11 @@
     .overlay h2 { font-size: 16px; color: #ff0055; margin-bottom: 8px; text-shadow: 2px 2px 0 #ffe600; }
     .overlay p { font-family: 'VT323', monospace; font-size: 19px; color: #ede2cd; margin-bottom: 16px; line-height: 1.3; }
 
-    /* MODULE 2: CHESS BEATS */
-    .beats-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; }
-    .beats-controls {
-      display: flex; flex-wrap: wrap; gap: 8px; width: 100%; justify-content: space-between; align-items: center;
-      background: #0d0917; border: 3px solid #3c2a5c; padding: 8px 10px; margin-bottom: 10px; box-shadow: 2px 2px 0 #000;
-    }
-    .beats-presets { display: flex; gap: 5px; width: 100%; margin-bottom: 10px; overflow-x: auto; padding-bottom: 4px; }
-    .preset-chip {
-      background: #1f1730; border: 2px solid #3c2a5c; color: #9f8fc2; font-size: 8px; padding: 5px 8px; cursor: pointer; white-space: nowrap;
-    }
-    .preset-chip.active { background: #ff0055; color: #fff; border-color: #ffe600; }
-    .beats-grid-box { display: flex; width: 100%; gap: 6px; }
-    .tracks-sidebar { display: grid; grid-template-rows: repeat(8, 1fr); gap: 2px; width: 90px; font-size: 7px; }
-    .track-row-lbl { display: flex; align-items: center; justify-content: flex-end; gap: 4px; color: #00e5ff; }
-    .track-row-lbl .icon { font-size: 13px; color: #ffe600; }
-    .matrix-grid {
-      flex: 1; aspect-ratio: 1 / 1; border: 3px solid #3c2a5c; background: #0d0917; display: grid;
-      grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); gap: 2px; padding: 2px;
-    }
-    .bpad { display: flex; align-items: center; justify-content: center; font-size: clamp(12px, 3.2vw, 16px); cursor: pointer; }
-    .bpad.light { background: #241b38; color: #533e7d; }
-    .bpad.dark { background: #150f24; color: #3b2a59; }
-    .bpad.active { background: #ff0055 !important; color: #ffffff !important; box-shadow: inset 2px 2px 0 #ff6699; }
-    .bpad.playhead-col { outline: 2px solid #00ff66; background: rgba(0, 255, 102, 0.15) !important; }
-    .bpad.active.playhead-hit { background: #00ff66 !important; color: #000 !important; box-shadow: 0 0 12px #00ff66; }
-
     /* ==============================================
-       MODULE 3: ROAD TO 3000 (HARDCORE ELO GRIND)
+       SCREEN: ROAD TO 3000 (HARDCORE ELO GRIND)
     ============================================== */
     .smasher-wrap {
       width: 100%;
-      max-width: 440px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -292,7 +309,7 @@
       background: #1f1433;
       border: 2px solid #ffe600;
       padding: 6px;
-      font-size: 9px;
+      font-size: 8px;
       color: #ffe600;
       margin-bottom: 8px;
       box-shadow: 2px 2px 0 #000;
@@ -410,7 +427,6 @@
       letter-spacing: 1px;
     }
 
-    /* Tight Upgrades Grid - only 2 hard-earned upgrades */
     .upgrades-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -431,7 +447,6 @@
     .upg-title { font-size: 8px; color: #fff; line-height: 1.3; }
     .upg-cost { font-size: 8px; color: #ffe600; margin-top: 4px; }
 
-    /* Victory Modal 3000 ELO */
     .win-modal {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -449,8 +464,38 @@
     .win-modal.active { display: flex; animation: winPop 0.3s ease; }
     @keyframes winPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-    /* MODULE 4: SLOT MACHINE */
-    .slot-wrap { width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    /* ==============================================
+       SCREEN: CHESS BEATS (8-BIT)
+    ============================================== */
+    .beats-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; }
+    .beats-controls {
+      display: flex; flex-wrap: wrap; gap: 8px; width: 100%; justify-content: space-between; align-items: center;
+      background: #0d0917; border: 3px solid #3c2a5c; padding: 8px 10px; margin-bottom: 10px; box-shadow: 2px 2px 0 #000;
+    }
+    .beats-presets { display: flex; gap: 5px; width: 100%; margin-bottom: 10px; overflow-x: auto; padding-bottom: 4px; }
+    .preset-chip {
+      background: #1f1730; border: 2px solid #3c2a5c; color: #9f8fc2; font-size: 8px; padding: 5px 8px; cursor: pointer; white-space: nowrap;
+    }
+    .preset-chip.active { background: #ff0055; color: #fff; border-color: #ffe600; }
+    .beats-grid-box { display: flex; width: 100%; gap: 6px; }
+    .tracks-sidebar { display: grid; grid-template-rows: repeat(8, 1fr); gap: 2px; width: 90px; font-size: 7px; }
+    .track-row-lbl { display: flex; align-items: center; justify-content: flex-end; gap: 4px; color: #00e5ff; }
+    .track-row-lbl .icon { font-size: 13px; color: #ffe600; }
+    .matrix-grid {
+      flex: 1; aspect-ratio: 1 / 1; border: 3px solid #3c2a5c; background: #0d0917; display: grid;
+      grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); gap: 2px; padding: 2px;
+    }
+    .bpad { display: flex; align-items: center; justify-content: center; font-size: clamp(12px, 3.2vw, 16px); cursor: pointer; }
+    .bpad.light { background: #241b38; color: #533e7d; }
+    .bpad.dark { background: #150f24; color: #3b2a59; }
+    .bpad.active { background: #ff0055 !important; color: #ffffff !important; box-shadow: inset 2px 2px 0 #ff6699; }
+    .bpad.playhead-col { outline: 2px solid #00ff66; background: rgba(0, 255, 102, 0.15) !important; }
+    .bpad.active.playhead-hit { background: #00ff66 !important; color: #000 !important; box-shadow: 0 0 12px #00ff66; }
+
+    /* ==============================================
+       SCREEN: SLOT MACHINE
+    ============================================== */
+    .slot-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
     .slot-machine-box {
       width: 100%; background: #0d0917; border: 4px solid #3c2a5c; padding: 14px; box-shadow: 0 0 0 2px #000, 4px 4px 0 #ff0055;
       display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;
@@ -463,30 +508,76 @@
     .reel-tag { font-size: 7px; color: #00e5ff; text-transform: uppercase; }
     .reel-text { font-family: 'VT323', monospace; font-size: 19px; color: #ede2cd; line-height: 1.2; }
     .reel-card.rolling { border-color: #ffe600; color: #ffe600; animation: shakePixel 0.1s steps(2) infinite; }
-    .slot-actions { display: flex; gap: 6px; width: 100%; justify-content: center; flex-wrap: wrap; }
 
-    .footer { margin-top: 16px; font-size: 8px; color: #635082; text-align: center; letter-spacing: 1px; }
+    .footer { margin-top: auto; padding-top: 16px; font-size: 8px; color: #635082; text-align: center; letter-spacing: 1px; }
   </style>
 </head>
 <body>
 
   <div class="hub-container">
-    <div class="header">
-      <div class="title">WHERE IS MY MIND</div>
-      <div class="subtitle">8-BIT CHESS ARCADE // RETRO LAB</div>
-      <button class="tg-share-btn" onclick="shareHub()">📤 ПОДЕЛИТЬСЯ</button>
+
+    <!-- ==============================================
+         SCREEN 1: MAIN ARCADE MENU (HUB)
+    ============================================== -->
+    <div class="screen-pane active" id="screen-hub">
+      <div class="hub-header">
+        <img src="whereismymind_8bit_cover_640x360.png" alt="WHERE IS MY MIND ARCADE" style="width: 100%; max-width: 440px; border: 3px solid #ff0055; box-shadow: 0 0 14px rgba(255, 0, 85, 0.4); margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;">
+        <div class="hub-title">WHERE IS MY MIND</div>
+        <div class="hub-subtitle">8-BIT RETRO CHESS ARCADE</div>
+      </div>
+
+      <div class="menu-cards-list">
+        <!-- Card 1: Snake -->
+        <div class="menu-card" onclick="openGame('snake')">
+          <div class="menu-card-info">
+            <span class="menu-card-title">🐍 1. ШАХМАТНАЯ ЗМЕЙКА</span>
+            <span class="menu-card-desc">Конь-голова, пешечный хвост // HI: <span id="hubSnakeBest">0</span></span>
+          </div>
+          <span class="menu-card-arrow">►</span>
+        </div>
+
+        <!-- Card 2: Road to 3000 -->
+        <div class="menu-card" onclick="openGame('grind')">
+          <div class="menu-card-info">
+            <span class="menu-card-title">🏆 2. ПУТЬ К 3000 (ГРИНД)</span>
+            <span class="menu-card-desc">Цель: превзойти Магнуса // ELO: <span id="hubGrindElo">1000</span></span>
+          </div>
+          <span class="menu-card-arrow">►</span>
+        </div>
+
+        <!-- Card 3: Beats -->
+        <div class="menu-card" onclick="openGame('beats')">
+          <div class="menu-card-info">
+            <span class="menu-card-title">🎹 3. 8-BIT CHESS BEATS</span>
+            <span class="menu-card-desc">Драм-секвенсор на доске 8x8</span>
+          </div>
+          <span class="menu-card-arrow">►</span>
+        </div>
+
+        <!-- Card 4: Excuse Slot Machine -->
+        <div class="menu-card" onclick="openGame('excuse')">
+          <div class="menu-card-info">
+            <span class="menu-card-title">🎰 4. ГЕНЕРАТОР ОТМАЗОК</span>
+            <span class="menu-card-desc">Слот-машина после слива партии</span>
+          </div>
+          <span class="menu-card-arrow">►</span>
+        </div>
+      </div>
+
+      <div class="footer">
+        WHERE IS MY MIND // RETRO ARCADE 1989
+      </div>
     </div>
 
-    <!-- Navigation Tabs -->
-    <div class="nav-tabs">
-      <button class="tab-btn" id="tab-btn-run" onclick="switchTab('run', this)">🐍 ЗМЕЙКА</button>
-      <button class="tab-btn active" id="tab-btn-smasher" onclick="switchTab('smasher', this)">🏆 ПУТЬ К 3000</button>
-      <button class="tab-btn" id="tab-btn-beats" onclick="switchTab('beats', this)">🎹 8-BIT BEATS</button>
-      <button class="tab-btn" id="tab-btn-excuse" onclick="switchTab('excuse', this)">🎰 ОТМАЗКИ</button>
-    </div>
+    <!-- ==============================================
+         SCREEN 2: CHESS SNAKE
+    ============================================== -->
+    <div class="screen-pane" id="screen-snake">
+      <div class="game-top-bar">
+        <button class="back-btn" onclick="openHub()">◄ В ХАБ</button>
+        <span class="game-top-title">🐍 ШАХМАТНАЯ ЗМЕЙКА</span>
+      </div>
 
-    <!-- TAB 1: CHESS SNAKE -->
-    <div class="tab-pane" id="pane-run">
       <div class="snake-game-wrap">
         <div class="snake-stats">
           <div class="stat-box"><span class="stat-label">SCORE</span><span class="stat-val" id="snScore">0</span></div>
@@ -518,8 +609,15 @@
       </div>
     </div>
 
-    <!-- TAB 2: ROAD TO 3000 (HARDCORE ELO GRINDER) -->
-    <div class="tab-pane active" id="pane-smasher">
+    <!-- ==============================================
+         SCREEN 3: ROAD TO 3000
+    ============================================== -->
+    <div class="screen-pane" id="screen-grind">
+      <div class="game-top-bar">
+        <button class="back-btn" onclick="openHub()">◄ В ХАБ</button>
+        <span class="game-top-title">🏆 ПУТЬ К 3000</span>
+      </div>
+
       <div class="smasher-wrap">
         <div class="target-banner">
           ЦЕЛЬ: 3000 ELO // ПРЕВЗОЙДИ МАГНУСА (2882)!
@@ -546,7 +644,6 @@
           <div class="big-queen" id="smQueenIcon">♙</div>
         </div>
 
-        <!-- Only 2 hard-earned upgrades -->
         <div class="upgrades-grid">
           <div class="upg-card" onclick="buyUpg('fork')">
             <div class="upg-title">♞ Тактический Удар (+1 DMG)</div>
@@ -567,18 +664,22 @@
             ТЫ ПРЕВЗОЙШЕЛ МАГНУСА КАРЛСЕНА (2882)!<br>
             ТЫ АБСОЛЮТНЫЙ БОГ ШАХМАТНОГО ГРИНДА.
           </p>
-          <button class="pixel-btn" onclick="shareVictory()" style="background:#ffe600; color:#000; margin-bottom:10px;">
-            📤 ПОХВАСТАТЬСЯ В TG
-          </button>
-          <button class="pixel-btn" onclick="closeWinModal()" style="background:#1f1730; font-size:8px;">
-            ПРОДОЛЖИТЬ ИГРУ
+          <button class="pixel-btn" onclick="closeWinModal()" style="background:#1f1730; font-size:9px;">
+            ПРОДОЛЖИТЬ
           </button>
         </div>
       </div>
     </div>
 
-    <!-- TAB 3: CHESS BEATS -->
-    <div class="tab-pane" id="pane-beats">
+    <!-- ==============================================
+         SCREEN 4: CHESS BEATS
+    ============================================== -->
+    <div class="screen-pane" id="screen-beats">
+      <div class="game-top-bar">
+        <button class="back-btn" onclick="openHub()">◄ В ХАБ</button>
+        <span class="game-top-title">🎹 8-BIT BEATS</span>
+      </div>
+
       <div class="beats-wrap">
         <div class="beats-presets">
           <span style="font-size:7px; color:#76639c; align-self:center;">PRESETS:</span>
@@ -608,12 +709,19 @@
       </div>
     </div>
 
-    <!-- TAB 4: SLOT MACHINE -->
-    <div class="tab-pane" id="pane-excuse">
+    <!-- ==============================================
+         SCREEN 5: SLOT MACHINE (EXCUSES)
+    ============================================== -->
+    <div class="screen-pane" id="screen-excuse">
+      <div class="game-top-bar">
+        <button class="back-btn" onclick="openHub()">◄ В ХАБ</button>
+        <span class="game-top-title">🎰 ГЕНЕРАТОР ОТМАЗОК</span>
+      </div>
+
       <div class="slot-wrap">
         <div class="slot-machine-box">
           <div style="font-size:8px; color:#ffe600; letter-spacing:1px; text-transform:uppercase;">
-            🎰 ГЕНЕРАТОР ГРОССМЕЙСТЕРСКИХ ОТМАЗОК
+            СЛОТ-МАШИНА ОТМАЗОК
           </div>
 
           <div class="reels-container">
@@ -634,23 +742,10 @@
           <button class="pixel-btn" onclick="spinExcuses()" style="background:#ffe600; color:#000; box-shadow:inset -2px -2px 0 #b3a100, inset 2px 2px 0 #fff, 3px 3px 0 #ff0055;">
             SPIN / КРУТИТЬ
           </button>
-          
-          <div class="slot-actions">
-            <button class="pixel-btn" style="background:#1f1730; font-size:8px; padding:8px 10px;" onclick="speakExcuse()">
-              🗣 ОЗВУЧИТЬ
-            </button>
-            <button class="pixel-btn" style="background:#1f1730; font-size:8px; padding:8px 10px;" onclick="shareExcuse()">
-              📤 В ЧАТ TG
-            </button>
-          </div>
-          <div id="copyBanner" style="font-family:'VT323',monospace; font-size:18px; color:#00ff66; display:none;">✓ СКОПИРОВАНО!</div>
         </div>
       </div>
     </div>
 
-    <div class="footer">
-      WHERE IS MY MIND // RETRO ARCADE 1989 // @WhereIsMyMindChess
-    </div>
   </div>
 
   <script>
@@ -679,35 +774,40 @@
       } catch(e) {}
     }
 
-    function shareHub() {
+    // --- NAVIGATION (HUB <-> GAMES) ---
+    function openGame(gameId) {
+      ensureAudio();
       tgHaptic('light');
-      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('👾 Зацени 8-битный ретро-шахматный хаб: путь к 3000 Elo, змейка и биты!');
-      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-        window.Telegram.WebApp.openTelegramLink(shareUrl);
-      } else {
-        window.open(shareUrl, '_blank');
+      playTone(520, 'square', 0.05, 0.15);
+
+      document.querySelectorAll('.screen-pane').forEach(p => p.classList.remove('active'));
+      const targetScreen = document.getElementById(`screen-${gameId}`);
+      if (targetScreen) targetScreen.classList.add('active');
+
+      if (gameId === 'snake') {
+        initSnakeGame();
       }
     }
 
-    function shareVictory() {
-      tgHaptic('success');
-      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('🏆 Я набрал 3000 ELO в WhereIsMyMind и превзошел рекорд Магнуса Карлсена (2882)!');
-      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-        window.Telegram.WebApp.openTelegramLink(shareUrl);
-      } else {
-        window.open(shareUrl, '_blank');
-      }
+    function openHub() {
+      ensureAudio();
+      tgHaptic('light');
+      playTone(330, 'square', 0.05, 0.15);
+
+      // Stop running loops
+      if (snRunning) pauseSnake();
+      if (isBeatPlaying) stopBeats();
+
+      // Update Hub stats
+      updateHubStats();
+
+      document.querySelectorAll('.screen-pane').forEach(p => p.classList.remove('active'));
+      document.getElementById('screen-hub').classList.add('active');
     }
 
-    function shareExcuse() {
-      tgHaptic('light');
-      const text = `${document.getElementById('slotText1').textContent}, ${document.getElementById('slotText2').textContent}, ${document.getElementById('slotText3').textContent}`;
-      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('👾 Моя официальная отмазка:\n«' + text + '»');
-      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-        window.Telegram.WebApp.openTelegramLink(shareUrl);
-      } else {
-        window.open(shareUrl, '_blank');
-      }
+    function updateHubStats() {
+      document.getElementById('hubSnakeBest').textContent = localStorage.getItem('sn_best_chess') || 0;
+      document.getElementById('hubGrindElo').textContent = localStorage.getItem('sm_grind_elo') || 1000;
     }
 
     // --- 8-BIT AUDIO SYNTHESIZER ---
@@ -777,22 +877,6 @@
       gain.connect(bassBoostNode || masterGain);
       osc.start();
       osc.stop(actx.currentTime + 0.12);
-    }
-
-    function switchTab(tabId, el) {
-      ensureAudio();
-      tgHaptic('light');
-      playTone(440, 'square', 0.04, 0.1);
-
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-
-      if (el) el.classList.add('active');
-      const pane = document.getElementById(`pane-${tabId}`);
-      if (pane) pane.classList.add('active');
-
-      if (tabId !== 'beats' && isBeatPlaying) stopBeats();
-      if (tabId !== 'run' && snRunning) pauseSnake();
     }
 
     // ========================================================
@@ -961,6 +1045,7 @@
         snBest = snScore;
         localStorage.setItem('sn_best_chess', snBest);
         snBestEl.textContent = snBest;
+        updateHubStats();
       }
 
       snOverlayTitle.textContent = 'GAME OVER';
@@ -996,13 +1081,11 @@
       }
     }, { passive: true });
 
-    initSnakeGame();
-
     // ========================================================
     // MODULE 2: ROAD TO 3000 (HARDCORE BALANCED ELO GRIND)
     // ========================================================
     let smElo = parseInt(localStorage.getItem('sm_grind_elo')) || 1000;
-    let smBaseDmg = 1; // Pure 1 dmg per click
+    let smBaseDmg = 1;
     let smBonusDmg = parseInt(localStorage.getItem('sm_bonus_dmg')) || 0;
     let smMultiplier = parseFloat(localStorage.getItem('sm_mult')) || 1.0;
 
@@ -1013,7 +1096,6 @@
     let smStreakTimer = null;
     let hasWon = false;
 
-    // Hardcore boss ladder to 3000
     const smBosses = [
       { name: 'Любитель 1000', hp: 150, icon: '♙' },
       { name: 'Студент Клуба 1400', hp: 350, icon: '♘' },
@@ -1045,7 +1127,6 @@
       const streakMult = smClickStreak > 20 ? 1.5 : smClickStreak > 10 ? 1.25 : 1.0;
       updateStreakUI();
 
-      // Rare crit (10% chance)
       const isCrit = Math.random() < 0.10;
       const critBonus = isCrit ? 2 : 0;
       playBonk(isCrit);
@@ -1053,20 +1134,16 @@
       if (isCrit) tgHaptic('heavy');
       else tgHaptic('medium');
 
-      // Hardcore low damage math: exactly 1-3 dmg per click!
       const totalDmg = Math.max(1, Math.floor((smBaseDmg + smBonusDmg + critBonus) * smMultiplier * streakMult));
       smCurHp -= totalDmg;
       
-      // ELO increases slowly (1 ELO per click!)
       smElo += totalDmg;
       saveGrindProgress();
 
-      // Check 3000 ELO Victory!
       if (smElo >= 3000 && !hasWon) {
         triggerVictory();
       }
 
-      // Visual reaction
       const icon = document.getElementById('smQueenIcon');
       icon.classList.remove('hit', 'crit');
       void icon.offsetWidth;
@@ -1075,7 +1152,6 @@
 
       if (Math.random() < 0.15) showToxicBubble();
 
-      // Floating text
       const stage = document.getElementById('smStage');
       const floatEl = document.createElement('div');
       floatEl.className = `floating-dmg ${isCrit ? 'crit-dmg' : ''}`;
@@ -1086,11 +1162,10 @@
       stage.appendChild(floatEl);
       setTimeout(() => floatEl.remove(), 450);
 
-      // Check Boss Defeated
       if (smCurHp <= 0) {
         tgHaptic('success');
         playTone(660, 'square', 0.2, 0.35);
-        smElo += 50; // Bonus ELO for beating boss
+        smElo += 50;
         smBossIndex = (smBossIndex + 1) % smBosses.length;
         smMaxHp = smBosses[smBossIndex].hp;
         smCurHp = smMaxHp;
@@ -1161,6 +1236,7 @@
       localStorage.setItem('sm_mult', smMultiplier);
       localStorage.setItem('sm_cost_fork', smCosts.fork);
       localStorage.setItem('sm_cost_ber', smCosts.berserk);
+      updateHubStats();
     }
 
     function updateSmasherUI() {
@@ -1174,8 +1250,6 @@
       document.getElementById('upgCostFork').textContent = `${smCosts.fork} ELO`;
       document.getElementById('upgCostBer').textContent = `${smCosts.berserk} ELO`;
     }
-
-    updateSmasherUI();
 
     // ========================================================
     // MODULE 3: CHESS BEATS (8-BIT)
@@ -1448,8 +1522,6 @@
       const t1 = document.getElementById('slotText1');
       const t2 = document.getElementById('slotText2');
       const t3 = document.getElementById('slotText3');
-      const banner = document.getElementById('copyBanner');
-      banner.style.display = 'none';
 
       r1.classList.add('rolling');
       r2.classList.add('rolling');
@@ -1474,18 +1546,9 @@
       }, 70);
     }
 
-    function speakExcuse() {
-      tgHaptic('light');
-      const text = `${document.getElementById('slotText1').textContent}, ${document.getElementById('slotText2').textContent}, ${document.getElementById('slotText3').textContent}`;
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'ru-RU';
-        utter.rate = 1.05;
-        utter.pitch = 0.95;
-        window.speechSynthesis.speak(utter);
-      }
-    }
+    // Init
+    updateSmasherUI();
+    updateHubStats();
   </script>
 </body>
 </html>
