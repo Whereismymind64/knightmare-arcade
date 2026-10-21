@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>KNIGHTMARE ARCADE // Telegram Mini App</title>
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;600;700;800&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: manipulation;
+    }
+
+    body {
+      background: #0d0b0b;
+      color: #ede2cd;
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hub-container {
+      width: 100%;
+      max-width: 620px;
+      background: #171312;
+      border: 2px solid #8b2522;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.9), inset 0 0 50px rgba(139,37,34,0.12);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 14px;
+      width: 100%;
+      border-bottom: 1px solid #362927;
+      padding-bottom: 12px;
+      position: relative;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 5.5vw, 30px);
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #ede2cd;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0px #8b2522;
+    }
+
+    .subtitle {
+      font-size: 10px;
+      color: #9c917f;
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+
+    .tg-share-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: #201a18;
+      border: 1px solid #4a3a37;
+      color: #ffd166;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      background: #201a18;
+      color: #b5a995;
+      border: 1px solid #453733;
+      padding: 8px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tab-btn:active, .tab-btn.active {
+      background: #8b2522;
+      border-color: #ff4742;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(255, 71, 66, 0.4);
+    }
+
+    .tab-pane {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.12s ease-out;
+    }
+
+    .tab-pane.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .btn {
+      background: #8b2522;
+      color: #ede2cd;
+      border: 1px solid #ff4742;
+      padding: 10px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.1s ease;
+    }
+
+    .btn:active {
+      background: #a82e2a;
+      transform: scale(0.98);
+    }
+
+    /* MODULE 1: KNIGHT RUN */
+    .knight-game-wrap {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      background: #110e0e;
+      border: 1px solid #382c29;
+      border-radius: 6px;
+      padding: 8px 14px;
+      margin-bottom: 10px;
+    }
+
+    .stat-box { display: flex; flex-direction: column; align-items: center; }
+    .stat-label { font-size: 9px; color: #7d7264; text-transform: uppercase; }
+    .stat-val { font-size: 16px; font-weight: 800; color: #ff4742; }
+
+    .board-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 2px solid #382c29;
+      background: #231c1a;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    #knightBoard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      width: 100%;
+      height: 100%;
+    }
+
+    .cell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(20px, 5.5vw, 30px);
+      cursor: pointer;
+    }
+
+    .cell.light { background: #c0b198; color: #151110; }
+    .cell.dark { background: #54443d; color: #151110; }
+
+    .cell.valid::after {
+      content: '';
+      position: absolute;
+      width: 32%;
+      height: 32%;
+      background: rgba(180, 30, 30, 0.9);
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff3b30;
+      animation: pulse 1s infinite alternate;
+    }
+
+    .cell.valid.target-cell::after {
+      width: 75%;
+      height: 75%;
+      background: transparent;
+      border: 3px solid #ff3b30;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #ff3b30;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.85); opacity: 0.7; }
+      100% { transform: scale(1.15); opacity: 1; }
+    }
+
+    .knight-piece { filter: drop-shadow(0 3px 5px rgba(0,0,0,0.8)); z-index: 2; }
+    .target-piece { color: #fff; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); z-index: 1; }
+
+    .overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(17, 13, 13, 0.94);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+    }
+
+    .overlay.hidden { display: none; }
+    .overlay h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: #ff4742; margin-bottom: 6px; }
+    .overlay p { font-size: 11px; color: #b0a492; margin-bottom: 14px; line-height: 1.4; }
+
+    /* MODULE 2: CHESS BEATS */
+    .beats-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .beats-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      background: #110e0e;
+      border: 1px solid #382c29;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+    }
+
+    .beats-presets {
+      display: flex;
+      gap: 5px;
+      width: 100%;
+      margin-bottom: 10px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .preset-chip {
+      background: #1c1615;
+      border: 1px solid #3d302d;
+      color: #9c9180;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 16px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .preset-chip.active {
+      background: #8b2522;
+      border-color: #ff4742;
+      color: #fff;
+    }
+
+    .beats-grid-box {
+      display: flex;
+      width: 100%;
+      gap: 6px;
+    }
+
+    .tracks-sidebar {
+      display: grid;
+      grid-template-rows: repeat(8, 1fr);
+      gap: 2px;
+      width: 95px;
+      font-size: 9px;
+    }
+
+    .track-row-lbl {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      color: #8c8070;
+      font-weight: 700;
+    }
+
+    .track-row-lbl .icon { font-size: 14px; color: #ede2cd; }
+
+    .matrix-grid {
+      flex: 1;
+      aspect-ratio: 1 / 1;
+      border: 2px solid #382c29;
+      background: #171312;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 2px;
+      padding: 2px;
+      border-radius: 4px;
+    }
+
+    .bpad {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(12px, 3.2vw, 18px);
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .bpad.light { background: #332b27; color: #7a6e62; }
+    .bpad.dark { background: #211c1a; color: #52473f; }
+
+    .bpad.active {
+      background: #8b2522 !important;
+      color: #ffffff !important;
+      box-shadow: inset 0 0 6px rgba(255, 71, 66, 0.6);
+      transform: scale(0.96);
+    }
+
+    .bpad.playhead-col {
+      outline: 2px solid #ff4742;
+      background: rgba(255, 71, 66, 0.15) !important;
+    }
+
+    .bpad.active.playhead-hit {
+      background: #ff4742 !important;
+      transform: scale(1.08);
+      box-shadow: 0 0 14px #ff4742;
+      z-index: 2;
+    }
+
+    /* MODULE 3: QUEEN SMASHER */
+    .smasher-wrap {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .smasher-stats {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      background: #110e0e;
+      border: 1px solid #382c29;
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .queen-stage {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, #2e1d1b 0%, #140f0e 70%);
+      border: 3px solid #8b2522;
+      border-radius: 50%;
+      box-shadow: 0 0 30px rgba(255, 71, 66, 0.25);
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: transform 0.04s ease;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .queen-stage:active {
+      transform: scale(0.92);
+      box-shadow: 0 0 40px rgba(255, 71, 66, 0.6);
+    }
+
+    .big-queen {
+      font-size: 100px;
+      color: #ede2cd;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.8));
+      transition: transform 0.08s ease;
+      pointer-events: none;
+    }
+
+    .big-queen.hit { transform: scale(1.15) rotate(6deg); filter: drop-shadow(0 0 20px #ff4742); }
+    .big-queen.crit { transform: scale(1.25) rotate(-10deg); filter: drop-shadow(0 0 30px #ffd166); color: #ff4742; }
+
+    .toxic-bubble {
+      position: absolute;
+      top: 10px;
+      background: #ff4742;
+      color: #000;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      pointer-events: none;
+      animation: popBubble 0.2s ease-out;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      white-space: nowrap;
+      z-index: 5;
+    }
+
+    @keyframes popBubble {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .hp-bar-outer {
+      width: 100%;
+      height: 12px;
+      background: #201a18;
+      border-radius: 6px;
+      border: 1px solid #3d302d;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .hp-bar-inner {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #ff4742, #ffd166);
+      transition: width 0.08s linear;
+    }
+
+    .floating-dmg {
+      position: absolute;
+      color: #ffd166;
+      font-weight: 800;
+      font-size: 18px;
+      pointer-events: none;
+      animation: floatUp 0.6s ease-out forwards;
+      text-shadow: 0 2px 6px #000;
+      z-index: 4;
+    }
+
+    .floating-dmg.crit-dmg { color: #ff3b30; font-size: 24px; text-shadow: 0 0 10px #ffd166; }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-50px) scale(1.2); }
+    }
+
+    .combo-streak-bar {
+      font-size: 10px;
+      color: #06d6a0;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .upgrades-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .upg-card {
+      background: #1a1413;
+      border: 1px solid #382c29;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .upg-card:active { border-color: #ff4742; background: #261d1b; }
+    .upg-title { font-size: 10px; font-weight: 700; color: #ede2cd; }
+    .upg-cost { font-size: 9px; color: #ffd166; margin-top: 1px; }
+
+    /* MODULE 4: SLOT MACHINE */
+    .slot-wrap {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .slot-machine-box {
+      width: 100%;
+      background: #110e0e;
+      border: 2px solid #8b2522;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .reels-container { display: grid; grid-template-columns: 1fr; gap: 8px; }
+
+    .reel-card {
+      background: #1e1716;
+      border: 1px solid #4a3a37;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-height: 60px;
+      justify-content: center;
+    }
+
+    .reel-tag { font-size: 8px; color: #8c8070; text-transform: uppercase; letter-spacing: 1px; }
+    .reel-text { font-size: 13px; font-weight: 700; color: #ede2cd; line-height: 1.25; }
+
+    .reel-card.rolling { animation: shake 0.1s infinite; border-color: #ff4742; color: #ffd166; }
+
+    @keyframes shake {
+      0% { transform: translateY(-2px); }
+      50% { transform: translateY(2px); }
+      100% { transform: translateY(0); }
+    }
+
+    .slot-actions { display: flex; gap: 6px; width: 100%; justify-content: center; flex-wrap: wrap; }
+
+    .slot-btn {
+      background: #8b2522;
+      border: 2px solid #ff4742;
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 10px 20px;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      border-radius: 6px;
+      box-shadow: 0 0 16px rgba(255, 71, 66, 0.4);
+    }
+
+    .copy-banner { font-size: 10px; color: #06d6a0; display: none; }
+
+    .footer { margin-top: 16px; font-size: 9px; color: #5a4f44; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="hub-container">
+    <div class="header">
+      <div class="title">KNIGHTMARE ARCADE</div>
+      <div class="subtitle">Шахматный Хаб Александра Савина // TG Mini App</div>
+      <button class="tg-share-btn" onclick="shareHub()">📤 Поделиться</button>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" id="tab-btn-run" onclick="switchTab('run', this)">♞ Побег Коня</button>
+      <button class="tab-btn" id="tab-btn-beats" onclick="switchTab('beats', this)">🎹 Chess Beats</button>
+      <button class="tab-btn" id="tab-btn-smasher" onclick="switchTab('smasher', this)">🔨 Ферзевый Кликер</button>
+      <button class="tab-btn" id="tab-btn-excuse" onclick="switchTab('excuse', this)">🎰 Отмазки</button>
+    </div>
+
+    <!-- TAB 1: KNIGHT RUN -->
+    <div class="tab-pane active" id="pane-run">
+      <div class="knight-game-wrap">
+        <div class="stats-bar">
+          <div class="stat-box"><span class="stat-label">Счет</span><span class="stat-val" id="kScore">0</span></div>
+          <div class="stat-box"><span class="stat-label">Время</span><span class="stat-val" id="kTimer" style="color:#ffd166;">30s</span></div>
+          <div class="stat-box"><span class="stat-label">Комбо</span><span class="stat-val" id="kCombo" style="color:#06d6a0;">x1</span></div>
+          <div class="stat-box"><span class="stat-label">Рекорд</span><span class="stat-val" id="kBest" style="color:#ede2cd;">0</span></div>
+        </div>
+
+        <div class="board-frame">
+          <div id="knightBoard"></div>
+          <div class="overlay" id="kOverlay">
+            <h2 id="kOverlayTitle">ПОБЕГ КОНЯ</h2>
+            <p id="kOverlayDesc">
+              Управляй черным конём ♞.<br>
+              Прыгай буквой «Г» и руби белые фигуры за отведенное время!<br>
+              Каждое взятие: +2 сек к таймеру и рост комбо.
+            </p>
+            <button class="btn" id="kStartBtn">В БОЙ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: CHESS BEATS -->
+    <div class="tab-pane" id="pane-beats">
+      <div class="beats-wrap">
+        <div class="beats-presets">
+          <span style="font-size:9px; color:#6e6459; align-self:center;">Пресеты:</span>
+          <div class="preset-chip active" id="chip-phonk" onclick="loadBeatPreset('phonk', this)">⚡ Phonk Gambit</div>
+          <div class="preset-chip" onclick="loadBeatPreset('sicilian', this)">♟️ Sicilian Trap</div>
+          <div class="preset-chip" onclick="loadBeatPreset('lofi', this)">☕ Queen's Lofi</div>
+          <div class="preset-chip" onclick="loadBeatPreset('chaos', this)">🎲 Рандом</div>
+          <div class="preset-chip" onclick="clearBeatBoard()">🧹 Очистить</div>
+        </div>
+
+        <div class="beats-controls">
+          <button class="btn" id="bPlayBtn" style="background:#8b2522; padding:6px 14px; font-size:11px;">▶ СТАРТ</button>
+          <div style="display:flex; align-items:center; gap:6px; font-size:10px; color:#b0a492;">
+            <span>BPM:</span>
+            <input type="range" id="bBpm" min="70" max="150" value="120" style="width:70px; accent-color:#ff4742;">
+            <span id="bBpmVal" style="color:#ff4742; font-weight:800; width:22px;">120</span>
+          </div>
+          <button class="btn" id="bassBoostBtn" style="background:#251c1a; padding:5px 10px; font-size:9px;" onclick="toggleBassBoost()">
+            🔊 BASS: OFF
+          </button>
+        </div>
+
+        <div class="beats-grid-box">
+          <div class="tracks-sidebar" id="bTracks"></div>
+          <div class="matrix-grid" id="bGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: QUEEN SMASHER -->
+    <div class="tab-pane" id="pane-smasher">
+      <div class="smasher-wrap">
+        <div class="smasher-stats">
+          <div><div style="font-size:9px; color:#8c8070;">ELO РЕЙТИНГ</div><div id="smElo" style="font-size:18px; font-weight:800; color:#ffd166;">1200</div></div>
+          <div><div style="font-size:9px; color:#8c8070;">БОСС</div><div id="smBossName" style="font-size:12px; font-weight:700; color:#ede2cd;">Ферзь-Зевун</div></div>
+          <div><div style="font-size:9px; color:#8c8070;">УРОН КЛИКА</div><div id="smDmg" style="font-size:18px; font-weight:800; color:#ff4742;">10</div></div>
+        </div>
+
+        <div class="combo-streak-bar" id="smStreakText">КЛИКАЙ БЫСТРЕЕ: СТРИК x1.0</div>
+
+        <div style="width:100%; display:flex; justify-content:space-between; font-size:9px; margin-bottom:3px; color:#8c8070;">
+          <span>ЗДОРОВЬЕ:</span>
+          <span id="smHpText">100 / 100</span>
+        </div>
+        <div class="hp-bar-outer">
+          <div class="hp-bar-inner" id="smHpBar"></div>
+        </div>
+
+        <div class="queen-stage" id="smStage" onclick="smashQueen(event)">
+          <div class="toxic-bubble" id="toxicBubble" style="display:none;">ЛАКЕР!</div>
+          <div class="big-queen" id="smQueenIcon">♕</div>
+        </div>
+
+        <div class="upgrades-grid">
+          <div class="upg-card" onclick="buyUpg('fork')">
+            <div class="upg-title">♞ Вилка (+15 к клику)</div>
+            <div class="upg-cost" id="upgCostFork">80 Elo</div>
+          </div>
+          <div class="upg-card" onclick="buyUpg('battery')">
+            <div class="upg-title">♜ Батарея (+45 к клику)</div>
+            <div class="upg-cost" id="upgCostBat">250 Elo</div>
+          </div>
+          <div class="upg-card" onclick="buyUpg('autoPawn')">
+            <div class="upg-title">♟ Авто-Пехота (+25/сек)</div>
+            <div class="upg-cost" id="upgCostAuto">150 Elo</div>
+          </div>
+          <div class="upg-card" onclick="buyUpg('berserk')">
+            <div class="upg-title">⚡ Берсерк (x2 урон)</div>
+            <div class="upg-cost" id="upgCostBer">500 Elo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: SLOT MACHINE -->
+    <div class="tab-pane" id="pane-excuse">
+      <div class="slot-wrap">
+        <div class="slot-machine-box">
+          <div style="font-size:10px; color:#8c8070; letter-spacing:1px; text-transform:uppercase;">
+            🎰 ГЕНЕРАТОР ГРОССМЕЙСТЕРСКИХ ОТМАЗОК
+          </div>
+
+          <div class="reels-container">
+            <div class="reel-card" id="reel1">
+              <span class="reel-tag">1. ВНЕШНЯЯ ПРИЧИНА СЛИВА</span>
+              <span class="reel-text" id="slotText1">Lichess специально подкрутил задержку сервера</span>
+            </div>
+            <div class="reel-card" id="reel2">
+              <span class="reel-tag">2. ЧТО СЛУЧИЛОСЬ НА ДОСКЕ</span>
+              <span class="reel-text" id="slotText2">я случайно зевнул ферзя из-за мисклика тачпадом</span>
+            </div>
+            <div class="reel-card" id="reel3">
+              <span class="reel-tag">3. МОЁ ДЕЙСТВИЕ</span>
+              <span class="reel-text" id="slotText3">поэтому требую реванш в берсерке на 30 секунд!</span>
+            </div>
+          </div>
+
+          <button class="slot-btn" onclick="spinExcuses()">КРУТИТЬ БАРАБАН</button>
+          
+          <div class="slot-actions">
+            <button class="btn" style="background:#231c1a; border-color:#4a3a37; padding:8px 14px; font-size:11px;" onclick="speakExcuse()">
+              🗣 Озвучить
+            </button>
+            <button class="btn" style="background:#231c1a; border-color:#4a3a37; padding:8px 14px; font-size:11px;" onclick="shareExcuse()">
+              📤 В чат TG
+            </button>
+          </div>
+          <div class="copy-banner" id="copyBanner">✓ Скопировано!</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      KNIGHTMARE LAB // Савин Александр // @whereismymindchess
+    </div>
+  </div>
+
+  <script>
+    // --- TELEGRAM WEB APP INIT ---
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+      try {
+        tg.setHeaderColor('#0d0b0b');
+        tg.setBackgroundColor('#0d0b0b');
+      } catch(e) {}
+    }
+
+    function tgHaptic(type) {
+      try {
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+          const hf = window.Telegram.WebApp.HapticFeedback;
+          if (type === 'light') hf.impactOccurred('light');
+          else if (type === 'medium') hf.impactOccurred('medium');
+          else if (type === 'heavy') hf.impactOccurred('heavy');
+          else if (type === 'rigid') hf.impactOccurred('rigid');
+          else if (type === 'success') hf.notificationOccurred('success');
+          else if (type === 'error') hf.notificationOccurred('error');
+        }
+      } catch(e) {}
+    }
+
+    function shareHub() {
+      tgHaptic('light');
+      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('🔥 Зацени шахматный хаб Knightmare Arcade: побег коня, битмейкер и ферзевый кликер!');
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
+        window.Telegram.WebApp.openTelegramLink(shareUrl);
+      } else {
+        window.open(shareUrl, '_blank');
+      }
+    }
+
+    function shareExcuse() {
+      tgHaptic('light');
+      const text = `${document.getElementById('slotText1').textContent}, ${document.getElementById('slotText2').textContent}, ${document.getElementById('slotText3').textContent}`;
+      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('Моя официальная отмазка после слива:\n«' + text + '»');
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
+        window.Telegram.WebApp.openTelegramLink(shareUrl);
+      } else {
+        window.open(shareUrl, '_blank');
+      }
+    }
+
+    // --- SHARED AUDIO ENGINE ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+    let masterGain = null;
+    let bassBoostNode = null;
+    let isBassBoosted = false;
+
+    function ensureAudio() {
+      if (!actx) {
+        actx = new AudioContext();
+        masterGain = actx.createGain();
+        masterGain.gain.setValueAtTime(0.75, actx.currentTime);
+
+        bassBoostNode = actx.createBiquadFilter();
+        bassBoostNode.type = 'lowshelf';
+        bassBoostNode.frequency.setValueAtTime(120, actx.currentTime);
+        bassBoostNode.gain.setValueAtTime(0, actx.currentTime);
+
+        bassBoostNode.connect(masterGain);
+        masterGain.connect(actx.destination);
+      }
+      if (actx.state === 'suspended') actx.resume();
+    }
+
+    function toggleBassBoost() {
+      ensureAudio();
+      tgHaptic('medium');
+      isBassBoosted = !isBassBoosted;
+      const btn = document.getElementById('bassBoostBtn');
+      if (isBassBoosted) {
+        bassBoostNode.gain.setValueAtTime(14, actx.currentTime);
+        btn.textContent = '🔊 BASS: ON 🔥';
+        btn.style.background = '#8b2522';
+        btn.style.borderColor = '#ff4742';
+      } else {
+        bassBoostNode.gain.setValueAtTime(0, actx.currentTime);
+        btn.textContent = '🔊 BASS: OFF';
+        btn.style.background = '#251c1a';
+        btn.style.borderColor = '#4a3a37';
+      }
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.2) {
+      ensureAudio();
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, actx.currentTime);
+      gain.gain.setValueAtTime(gainVal, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(bassBoostNode || masterGain);
+      osc.start();
+      osc.stop(actx.currentTime + duration);
+    }
+
+    function playBonk(isCrit = false) {
+      ensureAudio();
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = isCrit ? 'sawtooth' : 'triangle';
+      osc.frequency.setValueAtTime(isCrit ? 520 : 320, actx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(isCrit ? 90 : 60, actx.currentTime + 0.14);
+      gain.gain.setValueAtTime(isCrit ? 0.6 : 0.4, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + 0.14);
+      osc.connect(gain);
+      gain.connect(bassBoostNode || masterGain);
+      osc.start();
+      osc.stop(actx.currentTime + 0.14);
+    }
+
+    // --- TAB SWITCHING ---
+    function switchTab(tabId, el) {
+      ensureAudio();
+      tgHaptic('light');
+      playTone(320, 'triangle', 0.05, 0.1);
+
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      if (el) el.classList.add('active');
+      const pane = document.getElementById(`pane-${tabId}`);
+      if (pane) pane.classList.add('active');
+
+      if (tabId !== 'beats' && isBeatPlaying) {
+        stopBeats();
+      }
+    }
+
+    // ========================================================
+    // MODULE 1: KNIGHT RUN
+    // ========================================================
+    let kPos = { r: 4, c: 4 };
+    let kTargets = [];
+    let kScore = 0;
+    let kCombo = 1;
+    let kTime = 30;
+    let kBest = localStorage.getItem('k_best') || 0;
+    let kInterval = null;
+    let kRunning = false;
+
+    const kMoves = [
+      { r: -2, c: -1 }, { r: -2, c: 1 },
+      { r: -1, c: -2 }, { r: -1, c: 2 },
+      { r: 1, c: -2 },  { r: 1, c: 2 },
+      { r: 2, c: -1 },  { r: 2, c: 1 }
+    ];
+    const kPieces = ['♙', '♘', '♗', '♖', '♕'];
+
+    const kBoard = document.getElementById('knightBoard');
+    const kScoreEl = document.getElementById('kScore');
+    const kTimerEl = document.getElementById('kTimer');
+    const kComboEl = document.getElementById('kCombo');
+    const kBestEl = document.getElementById('kBest');
+    const kOverlay = document.getElementById('kOverlay');
+    const kOverlayTitle = document.getElementById('kOverlayTitle');
+    const kOverlayDesc = document.getElementById('kOverlayDesc');
+    const kStartBtn = document.getElementById('kStartBtn');
+
+    kBestEl.textContent = kBest;
+
+    function buildKnightBoard() {
+      kBoard.innerHTML = '';
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const d = document.createElement('div');
+          d.className = `cell ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+          d.addEventListener('click', () => onKnightCellClick(r, c));
+          kBoard.appendChild(d);
+        }
+      }
+    }
+
+    function getKValids(pos) {
+      return kMoves.map(m => ({ r: pos.r + m.r, c: pos.c + m.c }))
+                   .filter(m => m.r >= 0 && m.r < 8 && m.c >= 0 && m.c < 8);
+    }
+
+    function renderKnight() {
+      document.querySelectorAll('#knightBoard .cell').forEach(c => {
+        c.innerHTML = '';
+        c.classList.remove('valid', 'target-cell');
+      });
+
+      kTargets.forEach(t => {
+        const cell = kBoard.children[t.r * 8 + t.c];
+        if (cell) {
+          const s = document.createElement('span');
+          s.className = 'target-piece';
+          s.textContent = t.char;
+          cell.appendChild(s);
+        }
+      });
+
+      const kc = kBoard.children[kPos.r * 8 + kPos.c];
+      if (kc) {
+        const k = document.createElement('span');
+        k.className = 'knight-piece';
+        k.textContent = '♞';
+        kc.appendChild(k);
+      }
+
+      if (kRunning) {
+        const valids = getKValids(kPos);
+        valids.forEach(m => {
+          const c = kBoard.children[m.r * 8 + m.c];
+          if (c) {
+            c.classList.add('valid');
+            if (kTargets.some(t => t.r === m.r && t.c === m.c)) {
+              c.classList.add('target-cell');
+            }
+          }
+        });
+      }
+
+      kScoreEl.textContent = kScore;
+      kTimerEl.textContent = `${kTime}s`;
+      kComboEl.textContent = `x${kCombo}`;
+    }
+
+    function onKnightCellClick(r, c) {
+      if (!kRunning) return;
+      const valids = getKValids(kPos);
+      if (!valids.some(m => m.r === r && m.c === c)) return;
+
+      kPos = { r, c };
+      const idx = kTargets.findIndex(t => t.r === r && t.c === c);
+      if (idx !== -1) {
+        tgHaptic('medium');
+        const hit = kTargets[idx];
+        kTargets.splice(idx, 1);
+        kScore += hit.points * kCombo;
+        kCombo++;
+        kTime += 2;
+        playTone(400 + Math.min(kCombo, 12) * 35, 'square', 0.1, 0.2);
+        spawnKTarget();
+      } else {
+        tgHaptic('light');
+        kCombo = 1;
+        playTone(250, 'triangle', 0.05, 0.15);
+      }
+      renderKnight();
+    }
+
+    function spawnKTarget() {
+      while (kTargets.length < 3) {
+        const r = Math.floor(Math.random() * 8);
+        const c = Math.floor(Math.random() * 8);
+        if ((r === kPos.r && c === kPos.c) || kTargets.some(t => t.r === r && t.c === c)) continue;
+        const char = kPieces[Math.floor(Math.random() * kPieces.length)];
+        const points = char === '♕' ? 50 : char === '♖' ? 30 : 20;
+        kTargets.push({ r, c, char, points });
+      }
+    }
+
+    function startKnight() {
+      ensureAudio();
+      tgHaptic('medium');
+      kPos = { r: 4, c: 4 };
+      kTargets = [];
+      kScore = 0;
+      kCombo = 1;
+      kTime = 30;
+      kRunning = true;
+      kOverlay.classList.add('hidden');
+      spawnKTarget();
+      spawnKTarget();
+      renderKnight();
+
+      if (kInterval) clearInterval(kInterval);
+      kInterval = setInterval(() => {
+        kTime--;
+        if (kTime <= 0) endKnight();
+        renderKnight();
+      }, 1000);
+    }
+
+    function endKnight() {
+      kRunning = false;
+      clearInterval(kInterval);
+      tgHaptic('error');
+      playTone(160, 'sawtooth', 0.4, 0.25);
+
+      if (kScore > kBest) {
+        kBest = kScore;
+        localStorage.setItem('k_best', kBest);
+        kBestEl.textContent = kBest;
+      }
+
+      kOverlayTitle.textContent = 'ВРЕМЯ ВЫШЛО!';
+      kOverlayDesc.innerHTML = `Счет: <strong style="color:#ff4742; font-size:18px;">${kScore}</strong> | Комбо: x${kCombo} | Рекорд: ${kBest}`;
+      kStartBtn.textContent = 'ЕЩЕ РАЗ';
+      kOverlay.classList.remove('hidden');
+    }
+
+    kStartBtn.addEventListener('click', startKnight);
+    buildKnightBoard();
+    renderKnight();
+
+    // ========================================================
+    // MODULE 2: CHESS BEATS
+    // ========================================================
+    function playKick(t) {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(36, t + 0.12);
+      g.gain.setValueAtTime(1, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+      o.connect(g); g.connect(bassBoostNode || masterGain);
+      o.start(t); o.stop(t + 0.2);
+    }
+
+    function playSnare(t) {
+      const bSize = actx.sampleRate * 0.12, buf = actx.createBuffer(1, bSize, actx.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < bSize; i++) d[i] = Math.random() * 2 - 1;
+      const n = actx.createBufferSource(); n.buffer = buf;
+      const f = actx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.setValueAtTime(1500, t);
+      const ng = actx.createGain(); ng.gain.setValueAtTime(0.6, t); ng.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
+      n.connect(f); f.connect(ng); ng.connect(bassBoostNode || masterGain);
+      n.start(t);
+    }
+
+    function playHat(t) {
+      const bSize = actx.sampleRate * 0.04, buf = actx.createBuffer(1, bSize, actx.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < bSize; i++) d[i] = Math.random() * 2 - 1;
+      const n = actx.createBufferSource(); n.buffer = buf;
+      const f = actx.createBiquadFilter(); f.type = 'highpass'; f.frequency.setValueAtTime(7000, t);
+      const g = actx.createGain(); g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.04);
+      n.connect(f); f.connect(g); g.connect(bassBoostNode || masterGain);
+      n.start(t);
+    }
+
+    function play808(t, freq = 55) {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.85, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      o.connect(g); g.connect(bassBoostNode || masterGain);
+      o.start(t); o.stop(t + 0.35);
+    }
+
+    function playSynth(t, freq, type = 'sawtooth') {
+      const o = actx.createOscillator(), f = actx.createBiquadFilter(), g = actx.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, t);
+      f.type = 'lowpass'; f.frequency.setValueAtTime(1600, t); f.frequency.exponentialRampToValueAtTime(300, t + 0.2);
+      g.gain.setValueAtTime(0.35, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+      o.connect(f); f.connect(g); g.connect(bassBoostNode || masterGain);
+      o.start(t); o.stop(t + 0.2);
+    }
+
+    const bTracksData = [
+      { name: 'Queen Lead', piece: '♛', sound: (t) => playSynth(t, 880, 'square') },
+      { name: 'Rook Synth', piece: '♜', sound: (t) => playSynth(t, 659, 'sawtooth') },
+      { name: 'Bishop Pluck', piece: '♝', sound: (t) => playSynth(t, 523, 'triangle') },
+      { name: 'Knight Arp', piece: '♞', sound: (t) => playSynth(t, 440, 'sine') },
+      { name: '808 Bass', piece: '♚', sound: (t) => play808(t, 55) },
+      { name: 'Hi-Hat', piece: '♟', sound: (t) => playHat(t) },
+      { name: 'Snare / Clap', piece: '♟', sound: (t) => playSnare(t) },
+      { name: 'Kick Drum', piece: '♟', sound: (t) => playKick(t) }
+    ];
+
+    const bGridData = Array(8).fill(null).map(() => Array(8).fill(false));
+    let isBeatPlaying = false;
+    let bStep = 0;
+    let bBpm = 120;
+    let bTimer = null;
+
+    const bGridEl = document.getElementById('bGrid');
+    const bTracksEl = document.getElementById('bTracks');
+    const bPlayBtn = document.getElementById('bPlayBtn');
+    const bBpmInput = document.getElementById('bBpm');
+    const bBpmVal = document.getElementById('bBpmVal');
+
+    function buildBeatsUI() {
+      bTracksEl.innerHTML = '';
+      bTracksData.forEach(tr => {
+        const d = document.createElement('div');
+        d.className = 'track-row-lbl';
+        d.innerHTML = `<span>${tr.name}</span><span class="icon">${tr.piece}</span>`;
+        bTracksEl.appendChild(d);
+      });
+
+      bGridEl.innerHTML = '';
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = document.createElement('div');
+          p.className = `bpad ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+          p.addEventListener('click', () => toggleBeatPad(r, c));
+          bGridEl.appendChild(p);
+        }
+      }
+    }
+
+    function toggleBeatPad(r, c) {
+      ensureAudio();
+      tgHaptic('light');
+      bGridData[r][c] = !bGridData[r][c];
+      updateBeatPad(r, c);
+      if (bGridData[r][c]) bTracksData[r].sound(actx.currentTime);
+    }
+
+    function updateBeatPad(r, c) {
+      const pad = bGridEl.children[r * 8 + c];
+      if (bGridData[r][c]) {
+        pad.classList.add('active');
+        pad.innerHTML = `<span>${bTracksData[r].piece}</span>`;
+      } else {
+        pad.classList.remove('active');
+        pad.innerHTML = '';
+      }
+    }
+
+    function clearBeatBoard() {
+      tgHaptic('light');
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          bGridData[r][c] = false;
+          updateBeatPad(r, c);
+        }
+      }
+      document.querySelectorAll('.preset-chip').forEach(p => p.classList.remove('active'));
+    }
+
+    function startBeats() {
+      ensureAudio();
+      tgHaptic('medium');
+      isBeatPlaying = true;
+      bPlayBtn.textContent = '⏸ СТОП';
+      bPlayBtn.style.background = '#06d6a0';
+      bPlayBtn.style.color = '#000';
+      bStep = 0;
+      scheduleBeat();
+    }
+
+    function stopBeats() {
+      isBeatPlaying = false;
+      bPlayBtn.textContent = '▶ СТАРТ';
+      bPlayBtn.style.background = '#8b2522';
+      bPlayBtn.style.color = '#ede2cd';
+      clearTimeout(bTimer);
+      document.querySelectorAll('.bpad').forEach(p => p.classList.remove('playhead-col', 'playhead-hit'));
+    }
+
+    function scheduleBeat() {
+      if (!isBeatPlaying) return;
+      const dur = (60 / bBpm) / 2;
+
+      document.querySelectorAll('.bpad').forEach(p => p.classList.remove('playhead-col', 'playhead-hit'));
+      for (let r = 0; r < 8; r++) {
+        const pad = bGridEl.children[r * 8 + bStep];
+        pad.classList.add('playhead-col');
+        if (bGridData[r][bStep]) {
+          pad.classList.add('playhead-hit');
+          bTracksData[r].sound(actx.currentTime);
+        }
+      }
+
+      bStep = (bStep + 1) % 8;
+      bTimer = setTimeout(scheduleBeat, dur * 1000);
+    }
+
+    bPlayBtn.addEventListener('click', () => {
+      if (isBeatPlaying) stopBeats();
+      else startBeats();
+    });
+
+    bBpmInput.addEventListener('input', (e) => {
+      bBpm = parseInt(e.target.value);
+      bBpmVal.textContent = bBpm;
+    });
+
+    const bPresets = {
+      phonk: [
+        [7,0], [7,2], [7,4], [7,6],
+        [6,2], [6,6],
+        [5,0], [5,1], [5,2], [5,3], [5,4], [5,5], [5,6], [5,7],
+        [4,0], [4,3], [4,5],
+        [1,0], [1,4],
+        [0,1], [0,3], [0,7]
+      ],
+      sicilian: [
+        [7,0], [7,3], [7,5],
+        [6,4],
+        [5,0], [5,2], [5,4], [5,6],
+        [4,0], [4,4],
+        [3,1], [3,5],
+        [0,0], [0,4], [0,7]
+      ],
+      lofi: [
+        [7,0], [7,4],
+        [6,4],
+        [5,1], [5,3], [5,5], [5,7],
+        [4,0], [4,6],
+        [2,0], [2,2], [2,5]
+      ]
+    };
+
+    function loadBeatPreset(name, el) {
+      clearBeatBoard();
+      document.querySelectorAll('.preset-chip').forEach(p => p.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      if (name === 'chaos') {
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            if (Math.random() < 0.22) {
+              bGridData[r][c] = true;
+              updateBeatPad(r, c);
+            }
+          }
+        }
+        return;
+      }
+
+      const pData = bPresets[name];
+      if (pData) {
+        pData.forEach(([r, c]) => {
+          bGridData[r][c] = true;
+          updateBeatPad(r, c);
+        });
+      }
+    }
+
+    buildBeatsUI();
+    loadBeatPreset('phonk', document.getElementById('chip-phonk'));
+
+    // ========================================================
+    // MODULE 3: QUEEN SMASHER PRO + HAPTICS
+    // ========================================================
+    let smElo = 1200;
+    let smDmgVal = 10;
+    let smMaxHp = 100;
+    let smCurHp = 100;
+    let smBossIndex = 0;
+    let smAutoDmg = 0;
+    let smMultiplier = 1;
+    let smClickStreak = 0;
+    let smStreakTimer = null;
+
+    const smBosses = [
+      { name: 'Ферзь-Зевун', hp: 100, icon: '♕' },
+      { name: 'Токсичный Бот 1400', hp: 280, icon: '♕' },
+      { name: 'Ханс Ниманн с подсказками', hp: 700, icon: '♛' },
+      { name: 'Гроссмейстер в Тильте', hp: 1800, icon: '♛' },
+      { name: 'Stockfish 16 (Босс Вселенной)', hp: 4500, icon: '👑' }
+    ];
+
+    const toxicQuotes = [
+      'ЛАКЕР!', 'МИСКЛИК!', 'ТЫ ЧИТЕР!', 'РЕВАНШ ДАВАЙ!',
+      'Я ПРОСТО ЗЕВНУЛ!', 'НЕ ЧЕСТНО!', 'БОНГКЛАУД ВПЕРЕД!', 'ФЛАГ УРОНИШЬ!'
+    ];
+
+    const smCosts = { fork: 80, battery: 250, autoPawn: 150, berserk: 500 };
+
+    function smashQueen(e) {
+      ensureAudio();
+
+      smClickStreak++;
+      clearTimeout(smStreakTimer);
+      smStreakTimer = setTimeout(() => {
+        smClickStreak = 0;
+        updateStreakUI();
+      }, 700);
+
+      const streakMult = smClickStreak > 15 ? 2.5 : smClickStreak > 8 ? 1.6 : smClickStreak > 3 ? 1.2 : 1.0;
+      updateStreakUI();
+
+      const isCrit = Math.random() < 0.18;
+      const critMult = isCrit ? 2.5 : 1.0;
+      playBonk(isCrit);
+
+      // Trigger Telegram Haptic feedback
+      if (isCrit) tgHaptic('heavy');
+      else tgHaptic('medium');
+
+      const totalDmg = Math.floor(smDmgVal * smMultiplier * streakMult * critMult);
+      smCurHp -= totalDmg;
+      smElo += Math.floor(totalDmg / 2);
+
+      const icon = document.getElementById('smQueenIcon');
+      icon.classList.remove('hit', 'crit');
+      void icon.offsetWidth;
+      icon.classList.add(isCrit ? 'crit' : 'hit');
+      setTimeout(() => icon.classList.remove('hit', 'crit'), 120);
+
+      if (Math.random() < 0.25) showToxicBubble();
+
+      const stage = document.getElementById('smStage');
+      const floatEl = document.createElement('div');
+      floatEl.className = `floating-dmg ${isCrit ? 'crit-dmg' : ''}`;
+      floatEl.textContent = isCrit ? `КРИТ! -${totalDmg}` : `-${totalDmg}`;
+      const rect = stage.getBoundingClientRect();
+      floatEl.style.left = `${(e.clientX - rect.left) - 20}px`;
+      floatEl.style.top = `${(e.clientY - rect.top) - 15}px`;
+      stage.appendChild(floatEl);
+      setTimeout(() => floatEl.remove(), 600);
+
+      if (smCurHp <= 0) {
+        tgHaptic('success');
+        playTone(660, 'square', 0.25, 0.35);
+        smElo += 250;
+        smBossIndex = (smBossIndex + 1) % smBosses.length;
+        smMaxHp = smBosses[smBossIndex].hp;
+        smCurHp = smMaxHp;
+      }
+
+      updateSmasherUI();
+    }
+
+    function showToxicBubble() {
+      const b = document.getElementById('toxicBubble');
+      b.textContent = toxicQuotes[Math.floor(Math.random() * toxicQuotes.length)];
+      b.style.display = 'block';
+      setTimeout(() => b.style.display = 'none', 900);
+    }
+
+    function updateStreakUI() {
+      const el = document.getElementById('smStreakText');
+      if (smClickStreak > 15) {
+        el.textContent = '⚡ УЛЬТРА ФРЕНЗИ! x2.5 КЛИК!';
+        el.style.color = '#ff4742';
+      } else if (smClickStreak > 8) {
+        el.textContent = '🔥 СТРИК-РАЗОГРЕВ: x1.6 УРОН';
+        el.style.color = '#ffd166';
+      } else if (smClickStreak > 3) {
+        el.textContent = '⚡ СТРИК: x1.2 УРОН';
+        el.style.color = '#06d6a0';
+      } else {
+        el.textContent = 'КЛИКАЙ БЫСТРЕЕ ДЛЯ БЕШЕНОГО СТРИКА';
+        el.style.color = '#7d7162';
+      }
+    }
+
+    function buyUpg(type) {
+      ensureAudio();
+      const cost = smCosts[type];
+      if (smElo >= cost) {
+        tgHaptic('success');
+        smElo -= cost;
+        playTone(520, 'triangle', 0.15, 0.2);
+        if (type === 'fork') { smDmgVal += 15; smCosts.fork = Math.floor(smCosts.fork * 1.5); }
+        if (type === 'battery') { smDmgVal += 45; smCosts.battery = Math.floor(smCosts.battery * 1.6); }
+        if (type === 'autoPawn') { smAutoDmg += 25; smCosts.autoPawn = Math.floor(smCosts.autoPawn * 1.5); }
+        if (type === 'berserk') { smMultiplier *= 2; smCosts.berserk = Math.floor(smCosts.berserk * 2.5); }
+        updateSmasherUI();
+      } else {
+        tgHaptic('error');
+        playTone(150, 'sawtooth', 0.15, 0.2);
+      }
+    }
+
+    function updateSmasherUI() {
+      document.getElementById('smElo').textContent = smElo;
+      document.getElementById('smDmg').textContent = smDmgVal * smMultiplier;
+      document.getElementById('smBossName').textContent = smBosses[smBossIndex].name;
+      document.getElementById('smQueenIcon').textContent = smBosses[smBossIndex].icon;
+      document.getElementById('smHpText').textContent = `${Math.max(0, smCurHp)} / ${smMaxHp}`;
+      document.getElementById('smHpBar').style.width = `${Math.max(0, (smCurHp / smMaxHp) * 100)}%`;
+
+      document.getElementById('upgCostFork').textContent = `${smCosts.fork} Elo`;
+      document.getElementById('upgCostBat').textContent = `${smCosts.battery} Elo`;
+      document.getElementById('upgCostAuto').textContent = `${smCosts.autoPawn} Elo`;
+      document.getElementById('upgCostBer').textContent = `${smCosts.berserk} Elo`;
+    }
+
+    setInterval(() => {
+      if (smAutoDmg > 0) {
+        smCurHp -= smAutoDmg;
+        smElo += Math.floor(smAutoDmg / 4);
+        if (smCurHp <= 0) {
+          tgHaptic('success');
+          smElo += 250;
+          smBossIndex = (smBossIndex + 1) % smBosses.length;
+          smMaxHp = smBosses[smBossIndex].hp;
+          smCurHp = smMaxHp;
+        }
+        updateSmasherUI();
+      }
+    }, 1000);
+
+    // ========================================================
+    // MODULE 4: SLOT MACHINE
+    // ========================================================
+    const excuses1 = [
+      'Lichess специально подкрутил пинг в решающий момент',
+      'Кот внезапно прыгнул на пробел во время цейтнота',
+      'Солнечная вспышка сбила квантовую память Stockfish',
+      'Сосед включил перфоратор ровно на двадцать четвертом ходу',
+      'Мой соперник - скрытый гроссмейстер из Индии под фейком',
+      'Мышка залипла на левой кнопке и пошла не туда',
+      'Чай остыл, и моя концентрация упала до нуля',
+      'Крамник подал на меня протест за подозрительные движения'
+    ];
+
+    const excuses2 = [
+      'я зевнул ферзя на ровном месте из-за мисклика тачпадом',
+      'я пошел конем не той буквой Г прямо под связку слона',
+      'я перепутал мат с шахом и победоносно отдал ладью',
+      'я играл вслепую одной левой ногой',
+      'я тестировал секретный гамбит Бонгклауда',
+      'я уронил флаг за пять сотых секунды до мата сопернику'
+    ];
+
+    const excuses3 = [
+      'поэтому требую немедленный реванш в берсерке на тридцать секунд!',
+      'поэтому пишу в чат слово лакер и удаляю аккаунт до завтра.',
+      'поэтому эта партия аннулирована по негласным правилам ФИДЕ.',
+      'поэтому я просто подарил тебе победу из чистой жалости.',
+      'поэтому сейчас беру уроки у КМС Савина и вернусь за твоим рейтингом!'
+    ];
+
+    let isSpinning = false;
+
+    function spinExcuses() {
+      ensureAudio();
+      if (isSpinning) return;
+      isSpinning = true;
+      tgHaptic('medium');
+
+      const r1 = document.getElementById('reel1');
+      const r2 = document.getElementById('reel2');
+      const r3 = document.getElementById('reel3');
+      const t1 = document.getElementById('slotText1');
+      const t2 = document.getElementById('slotText2');
+      const t3 = document.getElementById('slotText3');
+      const banner = document.getElementById('copyBanner');
+      banner.style.display = 'none';
+
+      r1.classList.add('rolling');
+      r2.classList.add('rolling');
+      r3.classList.add('rolling');
+
+      let ticks = 0;
+      const tickInt = setInterval(() => {
+        playTone(300 + Math.random() * 300, 'square', 0.04, 0.1);
+        t1.textContent = excuses1[Math.floor(Math.random() * excuses1.length)];
+        t2.textContent = excuses2[Math.floor(Math.random() * excuses2.length)];
+        t3.textContent = excuses3[Math.floor(Math.random() * excuses3.length)];
+        ticks++;
+        if (ticks > 12) {
+          clearInterval(tickInt);
+          r1.classList.remove('rolling');
+          r2.classList.remove('rolling');
+          r3.classList.remove('rolling');
+          isSpinning = false;
+          tgHaptic('success');
+          playTone(660, 'triangle', 0.2, 0.3);
+        }
+      }, 70);
+    }
+
+    function speakExcuse() {
+      tgHaptic('light');
+      const text = `${document.getElementById('slotText1').textContent}, ${document.getElementById('slotText2').textContent}, ${document.getElementById('slotText3').textContent}`;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ru-RU';
+        utter.rate = 1.05;
+        utter.pitch = 0.95;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    updateSmasherUI();
+  </script>
+</body>
+</html>
