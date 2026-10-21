@@ -8,10 +8,10 @@
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- 8-Bit Pixel Fonts -->
+  <!-- Modern Gaming Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     * {
@@ -22,47 +22,35 @@
       -webkit-user-select: none;
       -webkit-touch-callout: none;
       touch-action: manipulation;
-      image-rendering: pixelated;
     }
 
     body {
-      background: #08060c;
-      color: #00ff66;
-      font-family: 'Press Start 2P', monospace;
+      background: #0d0f18;
+      color: #f0f3fa;
+      font-family: 'Rubik', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px;
+      padding: 12px 10px;
       overflow-x: hidden;
       position: relative;
-    }
-
-    /* Subtle CRT Scanline overlay */
-    body::before {
-      content: " ";
-      display: block;
-      position: fixed;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.28) 50%), 
-                  linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04));
-      z-index: 99;
-      background-size: 100% 4px, 6px 100%;
-      pointer-events: none;
+      -webkit-font-smoothing: antialiased;
     }
 
     .hub-container {
       width: 100%;
       max-width: 520px;
-      background: #110d1c;
-      border: 4px solid #ff0055;
-      box-shadow: 0 0 0 4px #000, 0 0 25px rgba(255, 0, 85, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.8);
-      padding: 16px;
+      background: #141726;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 42, 95, 0.15);
+      padding: 20px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-      min-height: 85vh;
+      min-height: 88vh;
     }
 
     /* Top bar inside individual games */
@@ -71,51 +59,61 @@
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      margin-bottom: 14px;
-      border-bottom: 3px solid #281d3d;
-      padding-bottom: 10px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #23283c;
+      padding-bottom: 12px;
     }
 
     .back-btn {
-      background: #241a38;
-      color: #ffe600;
-      border: 2px solid #ff0055;
-      padding: 8px 12px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 9px;
+      background: #1e2338;
+      color: #ffc837;
+      border: 1px solid rgba(255, 200, 55, 0.3);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: inset -2px -2px 0 #000, inset 2px 2px 0 #ff6699, 2px 2px 0 #000;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .back-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: none;
+      transform: scale(0.96);
+      background: #282f4c;
+      border-color: #ffc837;
     }
 
     .game-top-title {
-      font-size: 10px;
-      color: #00e5ff;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #00d2ff;
+      letter-spacing: 0.5px;
     }
 
-    /* Common Pixel Button */
+    /* Common Action Button */
     .pixel-btn {
-      background: #ff0055;
+      background: linear-gradient(135deg, #ff2a5f 0%, #d41444 100%);
       color: #ffffff;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      padding: 10px 16px;
-      border: 2px solid #000;
-      box-shadow: inset -2px -2px 0 #8b002e, inset 2px 2px 0 #ff6699, 3px 3px 0 #000;
+      font-family: 'Rubik', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 13px 22px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(255, 42, 95, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      transition: all 0.15s ease;
     }
 
     .pixel-btn:active {
-      box-shadow: inset 2px 2px 0 #8b002e, inset -2px -2px 0 #ff6699;
-      transform: translate(2px, 2px);
+      transform: scale(0.97);
+      box-shadow: 0 2px 8px rgba(255, 42, 95, 0.4);
     }
 
     /* Screen Panes (SPA navigation) */
@@ -135,23 +133,36 @@
     ============================================== */
     .hub-header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       width: 100%;
     }
 
+    .hub-banner-img {
+      width: 100%;
+      max-width: 440px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      margin-bottom: 14px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .hub-title {
-      font-size: clamp(16px, 5vw, 24px);
-      color: #ffe600;
+      font-size: clamp(20px, 6vw, 26px);
+      font-weight: 900;
+      color: #ffc837;
       text-transform: uppercase;
-      text-shadow: 3px 3px 0 #ff0055, -2px -2px 0 #000;
-      letter-spacing: 2px;
-      line-height: 1.4;
+      letter-spacing: 1.5px;
+      line-height: 1.2;
+      text-shadow: 0 2px 14px rgba(255, 200, 55, 0.35);
     }
 
     .hub-subtitle {
-      font-family: 'VT323', monospace;
-      font-size: 20px;
-      color: #00e5ff;
+      font-size: 13px;
+      font-weight: 700;
+      color: #00d2ff;
       letter-spacing: 2px;
       margin-top: 6px;
       text-transform: uppercase;
@@ -165,49 +176,55 @@
     }
 
     .menu-card {
-      background: #171026;
-      border: 3px solid #3c2a5c;
-      padding: 14px 16px;
+      background: #1a1e2e;
+      border: 1px solid #282f48;
+      border-radius: 16px;
+      padding: 16px 18px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: inset -3px -3px 0 #0a0712, inset 3px 3px 0 #281d3d, 3px 3px 0 #000;
-      transition: none;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      transition: all 0.15s ease;
+      min-height: 74px;
     }
 
     .menu-card:active {
-      border-color: #ffe600;
-      background: #ff0055;
-      box-shadow: inset 3px 3px 0 #8b002e, 1px 1px 0 #000;
-      transform: translate(2px, 2px);
+      background: #22283d;
+      border-color: #ff2a5f;
+      transform: scale(0.98);
+      box-shadow: 0 0 16px rgba(255, 42, 95, 0.3);
     }
-
-    .menu-card:active .menu-card-title { color: #fff; text-shadow: 1px 1px 0 #000; }
-    .menu-card:active .menu-card-desc { color: #ffe600; }
 
     .menu-card-info {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
       text-align: left;
     }
 
     .menu-card-title {
-      font-size: 11px;
-      color: #ffe600;
-      letter-spacing: 0.5px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.3px;
     }
 
     .menu-card-desc {
-      font-family: 'VT323', monospace;
-      font-size: 16px;
-      color: #9f8fc2;
+      font-size: 13px;
+      font-weight: 500;
+      color: #8c98ba;
+    }
+
+    .menu-card-desc strong {
+      color: #00e676;
     }
 
     .menu-card-arrow {
-      font-size: 14px;
-      color: #00ff66;
+      font-size: 22px;
+      font-weight: 700;
+      color: #00e676;
+      margin-left: 10px;
     }
 
     /* ==============================================
@@ -222,76 +239,115 @@
 
     .snake-stats {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       width: 100%;
-      background: #0d0917;
-      border: 3px solid #3c2a5c;
-      padding: 8px 12px;
-      margin-bottom: 10px;
-      box-shadow: 2px 2px 0 #000;
+      background: #1a1e2e;
+      border: 1px solid #282f48;
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .stat-box { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .stat-label { font-size: 7px; color: #76639c; text-transform: uppercase; }
-    .stat-val { font-size: 12px; color: #00ff66; }
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8c98ba;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 900;
+      color: #00e676;
+      line-height: 1.1;
+    }
 
     .canvas-frame {
       position: relative;
       width: 100%;
-      max-width: 380px;
+      max-width: 400px;
       aspect-ratio: 1 / 1;
-      border: 4px solid #ffe600;
-      background: #151024;
-      box-shadow: 0 0 0 2px #000, 4px 4px 0 #ff0055;
+      border-radius: 16px;
+      border: 2px solid #282f48;
+      background: #101320;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
       overflow: hidden;
     }
 
-    #snakeCanvas { width: 100%; height: 100%; display: block; }
+    #snakeCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
 
     .dpad-container {
       display: grid;
-      grid-template-columns: 50px 50px 50px;
-      grid-template-rows: 50px 50px;
-      gap: 6px;
-      margin-top: 14px;
+      grid-template-columns: 66px 66px 66px;
+      grid-template-rows: 60px 60px;
+      gap: 8px;
+      margin-top: 16px;
       justify-content: center;
     }
 
     .dpad-btn {
-      background: #241a38;
-      border: 3px solid #3c2a5c;
-      color: #00e5ff;
-      font-size: 18px;
+      background: #1e2338;
+      border: 1px solid #2d3550;
+      border-radius: 12px;
+      color: #00d2ff;
+      font-size: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 2px 2px 0 #000;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      transition: all 0.1s ease;
     }
 
     .dpad-btn:active {
-      background: #ff0055;
-      color: #fff;
-      border-color: #ffe600;
-      transform: translate(1px, 1px);
+      background: #ff2a5f;
+      color: #ffffff;
+      border-color: #ff2a5f;
+      transform: scale(0.94);
+      box-shadow: 0 0 12px rgba(255, 42, 95, 0.5);
     }
 
     .overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(10, 7, 18, 0.94);
+      background: rgba(12, 15, 25, 0.94);
+      backdrop-filter: blur(4px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 20px;
       text-align: center;
       z-index: 10;
     }
 
     .overlay.hidden { display: none; }
-    .overlay h2 { font-size: 16px; color: #ff0055; margin-bottom: 8px; text-shadow: 2px 2px 0 #ffe600; }
-    .overlay p { font-family: 'VT323', monospace; font-size: 19px; color: #ede2cd; margin-bottom: 16px; line-height: 1.3; }
+    .overlay h2 {
+      font-size: 20px;
+      font-weight: 900;
+      color: #ff2a5f;
+      margin-bottom: 10px;
+    }
+    .overlay p {
+      font-size: 15px;
+      font-weight: 500;
+      color: #d0d6eb;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
 
     /* ==============================================
        SCREEN: ROAD TO 3000 (HARDCORE ELO GRIND)
@@ -306,76 +362,97 @@
 
     .target-banner {
       width: 100%;
-      background: #1f1433;
-      border: 2px solid #ffe600;
-      padding: 6px;
-      font-size: 8px;
-      color: #ffe600;
-      margin-bottom: 8px;
-      box-shadow: 2px 2px 0 #000;
-      letter-spacing: 0.5px;
+      background: rgba(255, 200, 55, 0.1);
+      border: 1px solid rgba(255, 200, 55, 0.35);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffc837;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      line-height: 1.3;
     }
 
     .smasher-stats {
       display: flex;
       justify-content: space-around;
       width: 100%;
-      background: #0d0917;
-      border: 3px solid #3c2a5c;
-      padding: 8px 6px;
-      margin-bottom: 10px;
-      box-shadow: 2px 2px 0 #000;
+      background: #1a1e2e;
+      border: 1px solid #282f48;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-label-smasher {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8c98ba;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .stat-val-smasher {
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.2;
     }
 
     .queen-stage {
       position: relative;
-      width: 180px;
-      height: 180px;
+      width: 220px;
+      height: 220px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle, #2d1845 0%, #0c0817 75%);
-      border: 4px solid #ff0055;
-      box-shadow: 0 0 0 2px #000, 0 0 20px rgba(255, 0, 85, 0.4);
+      background: radial-gradient(circle, #2d1838 0%, #121524 75%);
+      border: 2px solid #ff2a5f;
+      border-radius: 24px;
+      box-shadow: 0 8px 30px rgba(255, 42, 95, 0.3);
       cursor: pointer;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
       -webkit-tap-highlight-color: transparent;
+      transition: transform 0.08s ease;
     }
 
     .queen-stage:active {
       transform: scale(0.94);
-      border-color: #ffe600;
+      border-color: #ffc837;
+      box-shadow: 0 0 30px rgba(255, 200, 55, 0.4);
     }
 
     .big-queen {
-      font-size: 85px;
-      color: #ffe600;
-      filter: drop-shadow(4px 4px 0 #ff0055);
+      font-size: 100px;
+      color: #ffc837;
+      filter: drop-shadow(0 4px 15px rgba(255, 42, 95, 0.5));
       pointer-events: none;
+      transition: transform 0.05s ease;
     }
 
     .big-queen.hit {
-      transform: scale(1.1) rotate(4deg);
-      filter: drop-shadow(0 0 15px #00ff66);
-      color: #00ff66;
+      transform: scale(1.1) rotate(5deg);
+      filter: drop-shadow(0 0 20px #00e676);
+      color: #00e676;
     }
 
     .big-queen.crit {
       transform: scale(1.2) rotate(-8deg);
-      filter: drop-shadow(0 0 25px #ff0055);
-      color: #ff0055;
+      filter: drop-shadow(0 0 30px #ff2a5f);
+      color: #ff2a5f;
     }
 
     .toxic-bubble {
       position: absolute;
-      top: 8px;
-      background: #ffe600;
-      color: #000;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-      padding: 4px 6px;
-      border: 2px solid #000;
-      box-shadow: 2px 2px 0 #ff0055;
+      top: -12px;
+      background: #ffc837;
+      color: #0d0f18;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       pointer-events: none;
       white-space: nowrap;
       z-index: 5;
@@ -383,133 +460,309 @@
 
     .hp-bar-outer {
       width: 100%;
-      height: 14px;
-      background: #000;
-      border: 2px solid #fff;
-      margin-bottom: 8px;
-      box-shadow: 2px 2px 0 #ff0055;
+      height: 18px;
+      background: #0d0f18;
+      border: 1px solid #282f48;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
     }
 
     .hp-bar-inner {
       height: 100%;
       width: 100%;
-      background: #ff0055;
+      background: linear-gradient(90deg, #ff2a5f, #ff6b8b);
+      border-radius: 8px;
       transition: width 0.05s linear;
     }
 
     .floating-dmg {
       position: absolute;
-      color: #ffe600;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 13px;
+      color: #ffc837;
+      font-size: 18px;
+      font-weight: 900;
       pointer-events: none;
-      animation: floatPixel 0.45s steps(5) forwards;
-      text-shadow: 2px 2px 0 #000;
+      animation: floatDamage 0.5s ease-out forwards;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
       z-index: 4;
     }
 
     .floating-dmg.crit-dmg {
-      color: #ff0055;
-      font-size: 16px;
-      text-shadow: 2px 2px 0 #ffe600;
+      color: #ff2a5f;
+      font-size: 24px;
+      text-shadow: 0 0 10px rgba(255, 42, 95, 0.6);
     }
 
-    @keyframes floatPixel {
+    @keyframes floatDamage {
       0% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-35px); }
+      100% { opacity: 0; transform: translateY(-45px); }
     }
 
     .combo-streak-bar {
-      font-family: 'VT323', monospace;
-      font-size: 18px;
-      color: #00e5ff;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #00d2ff;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
     }
 
     .upgrades-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: 10px;
       width: 100%;
     }
 
     .upg-card {
-      background: #171026;
-      border: 2px solid #3c2a5c;
-      padding: 8px 6px;
+      background: #1a1e2e;
+      border: 1px solid #282f48;
+      border-radius: 14px;
+      padding: 12px 14px;
       cursor: pointer;
       text-align: left;
-      box-shadow: 2px 2px 0 #000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.15s ease;
     }
 
-    .upg-card:active { border-color: #ffe600; background: #291d45; }
-    .upg-title { font-size: 8px; color: #fff; line-height: 1.3; }
-    .upg-cost { font-size: 8px; color: #ffe600; margin-top: 4px; }
+    .upg-card:active {
+      border-color: #ffc837;
+      background: #23293e;
+      transform: scale(0.97);
+    }
+
+    .upg-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .upg-cost {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffc837;
+      margin-top: 6px;
+    }
 
     .win-modal {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(8, 6, 12, 0.97);
-      border: 4px solid #ffe600;
+      background: rgba(12, 15, 25, 0.97);
+      backdrop-filter: blur(6px);
+      border-radius: 20px;
+      border: 2px solid #ffc837;
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 24px;
       text-align: center;
       z-index: 50;
     }
 
     .win-modal.active { display: flex; animation: winPop 0.3s ease; }
-    @keyframes winPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes winPop { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
     /* ==============================================
-       SCREEN: CHESS BEATS (8-BIT)
+       SCREEN: CHESS BEATS
     ============================================== */
-    .beats-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; }
+    .beats-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .beats-controls {
-      display: flex; flex-wrap: wrap; gap: 8px; width: 100%; justify-content: space-between; align-items: center;
-      background: #0d0917; border: 3px solid #3c2a5c; padding: 8px 10px; margin-bottom: 10px; box-shadow: 2px 2px 0 #000;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      background: #1a1e2e;
+      border: 1px solid #282f48;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
-    .beats-presets { display: flex; gap: 5px; width: 100%; margin-bottom: 10px; overflow-x: auto; padding-bottom: 4px; }
+
+    .beats-presets {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
     .preset-chip {
-      background: #1f1730; border: 2px solid #3c2a5c; color: #9f8fc2; font-size: 8px; padding: 5px 8px; cursor: pointer; white-space: nowrap;
+      background: #1a1e2e;
+      border: 1px solid #282f48;
+      border-radius: 10px;
+      color: #8c98ba;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
     }
-    .preset-chip.active { background: #ff0055; color: #fff; border-color: #ffe600; }
-    .beats-grid-box { display: flex; width: 100%; gap: 6px; }
-    .tracks-sidebar { display: grid; grid-template-rows: repeat(8, 1fr); gap: 2px; width: 90px; font-size: 7px; }
-    .track-row-lbl { display: flex; align-items: center; justify-content: flex-end; gap: 4px; color: #00e5ff; }
-    .track-row-lbl .icon { font-size: 13px; color: #ffe600; }
+
+    .preset-chip.active {
+      background: #ff2a5f;
+      color: #ffffff;
+      border-color: #ff2a5f;
+    }
+
+    .beats-grid-box {
+      display: flex;
+      width: 100%;
+      gap: 8px;
+    }
+
+    .tracks-sidebar {
+      display: grid;
+      grid-template-rows: repeat(8, 1fr);
+      gap: 3px;
+      width: 105px;
+    }
+
+    .track-row-lbl {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      color: #00d2ff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .track-row-lbl .icon {
+      font-size: 18px;
+      color: #ffc837;
+    }
+
     .matrix-grid {
-      flex: 1; aspect-ratio: 1 / 1; border: 3px solid #3c2a5c; background: #0d0917; display: grid;
-      grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); gap: 2px; padding: 2px;
+      flex: 1;
+      aspect-ratio: 1 / 1;
+      border: 1px solid #282f48;
+      border-radius: 12px;
+      background: #0d0f18;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 3px;
+      padding: 4px;
     }
-    .bpad { display: flex; align-items: center; justify-content: center; font-size: clamp(12px, 3.2vw, 16px); cursor: pointer; }
-    .bpad.light { background: #241b38; color: #533e7d; }
-    .bpad.dark { background: #150f24; color: #3b2a59; }
-    .bpad.active { background: #ff0055 !important; color: #ffffff !important; box-shadow: inset 2px 2px 0 #ff6699; }
-    .bpad.playhead-col { outline: 2px solid #00ff66; background: rgba(0, 255, 102, 0.15) !important; }
-    .bpad.active.playhead-hit { background: #00ff66 !important; color: #000 !important; box-shadow: 0 0 12px #00ff66; }
+
+    .bpad {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(14px, 3.5vw, 18px);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.08s ease;
+    }
+
+    .bpad.light { background: #20263c; color: #5a668c; }
+    .bpad.dark { background: #151826; color: #434c69; }
+    .bpad.active {
+      background: #ff2a5f !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 10px rgba(255, 42, 95, 0.6);
+    }
+    .bpad.playhead-col {
+      outline: 2px solid #00e676;
+      background: rgba(0, 230, 118, 0.2) !important;
+    }
+    .bpad.active.playhead-hit {
+      background: #00e676 !important;
+      color: #0d0f18 !important;
+      box-shadow: 0 0 16px #00e676;
+    }
 
     /* ==============================================
        SCREEN: SLOT MACHINE
     ============================================== */
-    .slot-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
-    .slot-machine-box {
-      width: 100%; background: #0d0917; border: 4px solid #3c2a5c; padding: 14px; box-shadow: 0 0 0 2px #000, 4px 4px 0 #ff0055;
-      display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;
+    .slot-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
-    .reels-container { display: grid; grid-template-columns: 1fr; gap: 8px; }
-    .reel-card {
-      background: #19122a; border: 2px solid #ff0055; padding: 8px; display: flex; flex-direction: column; gap: 4px;
-      min-height: 54px; justify-content: center; box-shadow: 2px 2px 0 #000;
-    }
-    .reel-tag { font-size: 7px; color: #00e5ff; text-transform: uppercase; }
-    .reel-text { font-family: 'VT323', monospace; font-size: 19px; color: #ede2cd; line-height: 1.2; }
-    .reel-card.rolling { border-color: #ffe600; color: #ffe600; animation: shakePixel 0.1s steps(2) infinite; }
 
-    .footer { margin-top: auto; padding-top: 16px; font-size: 8px; color: #635082; text-align: center; letter-spacing: 1px; }
+    .slot-machine-box {
+      width: 100%;
+      background: #1a1e2e;
+      border: 1px solid #282f48;
+      border-radius: 18px;
+      padding: 18px 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .reels-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .reel-card {
+      background: #141726;
+      border: 1px solid rgba(255, 42, 95, 0.35);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 68px;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .reel-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: #00d2ff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .reel-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f0f3fa;
+      line-height: 1.35;
+    }
+
+    .reel-card.rolling {
+      border-color: #ffc837;
+      color: #ffc837;
+      animation: shakePixel 0.1s steps(2) infinite;
+    }
+
+    @keyframes shakePixel {
+      0% { transform: translate(1px, 1px); }
+      50% { transform: translate(-1px, -1px); }
+      100% { transform: translate(1px, -1px); }
+    }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #727e9f;
+      text-align: center;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
@@ -521,7 +774,7 @@
     ============================================== -->
     <div class="screen-pane active" id="screen-hub">
       <div class="hub-header">
-        <img src="whereismymind_8bit_cover_640x360.png" alt="WHERE IS MY MIND ARCADE" style="width: 100%; max-width: 440px; border: 3px solid #ff0055; box-shadow: 0 0 14px rgba(255, 0, 85, 0.4); margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;">
+        <img src="whereismymind_8bit_cover_640x360.png" alt="WHERE IS MY MIND ARCADE" class="hub-banner-img">
         <div class="hub-title">WHERE IS MY MIND</div>
         <div class="hub-subtitle">8-BIT RETRO CHESS ARCADE</div>
       </div>
@@ -565,8 +818,8 @@
       </div>
 
       <div class="footer">
-        <div>WHERE IS MY MIND // RETRO ARCADE 1989</div>
-        <div style="margin-top:6px; color:#554370; font-size:7px; line-height:1.4;">
+        <div>WHERE IS MY MIND // RETRO ARCADE</div>
+        <div style="margin-top:6px; color:#727e9f; font-size:11px; line-height:1.4;">
           🔊 Если нет звука: выключите беззвучный режим (рычажок сбоку на iPhone)
         </div>
       </div>
@@ -584,8 +837,8 @@
       <div class="snake-game-wrap">
         <div class="snake-stats">
           <div class="stat-box"><span class="stat-label">SCORE</span><span class="stat-val" id="snScore">0</span></div>
-          <div class="stat-box"><span class="stat-label">LENGTH</span><span class="stat-val" id="snLength" style="color:#ffe600;">3</span></div>
-          <div class="stat-box"><span class="stat-label">HI-SCORE</span><span class="stat-val" id="snBest" style="color:#ff0055;">0</span></div>
+          <div class="stat-box"><span class="stat-label">LENGTH</span><span class="stat-val" id="snLength" style="color:#ffc837;">3</span></div>
+          <div class="stat-box"><span class="stat-label">HI-SCORE</span><span class="stat-val" id="snBest" style="color:#ff2a5f;">0</span></div>
         </div>
 
         <div class="canvas-frame" id="canvasFrame">
@@ -623,20 +876,29 @@
 
       <div class="smasher-wrap">
         <div class="target-banner">
-          ЦЕЛЬ: 3000 ELO // ПРЕВЗОЙДИ МАГНУСА (2882)!
+          🏆 ЦЕЛЬ: 3000 ELO // ПРЕВЗОЙДИ МАГНУСА КАРЛСЕНА (2882)!
         </div>
 
         <div class="smasher-stats">
-          <div><div style="font-size:7px; color:#76639c;">ELO РЕЙТИНГ</div><div id="smElo" style="font-size:15px; color:#ffe600;">1000</div></div>
-          <div><div style="font-size:7px; color:#76639c;">СОПЕРНИК</div><div id="smBossName" style="font-size:9px; color:#00e5ff;">Любитель 1000</div></div>
-          <div><div style="font-size:7px; color:#76639c;">DMG/CLICK</div><div id="smDmg" style="font-size:15px; color:#ff0055;">1</div></div>
+          <div class="stat-box">
+            <span class="stat-label-smasher">ELO РЕЙТИНГ</span>
+            <span id="smElo" class="stat-val-smasher" style="color:#ffc837;">1000</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label-smasher">СОПЕРНИК</span>
+            <span id="smBossName" class="stat-val-smasher" style="color:#00d2ff; font-size:16px;">Любитель 1000</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label-smasher">УРОН ЗА КЛИК</span>
+            <span id="smDmg" class="stat-val-smasher" style="color:#ff2a5f;">1</span>
+          </div>
         </div>
 
         <div class="combo-streak-bar" id="smStreakText">КЛИКАЙ БЫСТРЕЕ: СТРИК x1.0</div>
 
-        <div style="width:100%; display:flex; justify-content:space-between; font-size:7px; margin-bottom:4px; color:#76639c;">
+        <div style="width:100%; display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:6px; color:#8c98ba;">
           <span>HP СОПЕРНИКА:</span>
-          <span id="smHpText">150 / 150</span>
+          <span id="smHpText" style="color:#f0f3fa;">150 / 150</span>
         </div>
         <div class="hp-bar-outer">
           <div class="hp-bar-inner" id="smHpBar"></div>
@@ -660,14 +922,14 @@
 
         <!-- 3000 ELO VICTORY MODAL -->
         <div class="win-modal" id="winModal">
-          <h2 style="font-size:16px; color:#ffe600; text-shadow:2px 2px 0 #ff0055; margin-bottom:12px;">
+          <h2 style="font-size:22px; font-weight:900; color:#ffc837; margin-bottom:12px;">
             🏆 3000 ELO ДОСТИГНУТО!
           </h2>
-          <p style="font-family:'VT323',monospace; font-size:22px; color:#ede2cd; line-height:1.3; margin-bottom:16px;">
-            ТЫ ПРЕВЗОЙШЕЛ МАГНУСА КАРЛСЕНА (2882)!<br>
-            ТЫ АБСОЛЮТНЫЙ БОГ ШАХМАТНОГО ГРИНДА.
+          <p style="font-size:16px; font-weight:500; color:#d0d6eb; line-height:1.5; margin-bottom:20px;">
+            Ты превзошел исторический рекорд Магнуса Карлсена (2882)!<br>
+            Ты абсолютный бог шахматного гринда!
           </p>
-          <button class="pixel-btn" onclick="closeWinModal()" style="background:#1f1730; font-size:9px;">
+          <button class="pixel-btn" onclick="closeWinModal()">
             ПРОДОЛЖИТЬ
           </button>
         </div>
@@ -685,22 +947,22 @@
 
       <div class="beats-wrap">
         <div class="beats-presets">
-          <span style="font-size:7px; color:#76639c; align-self:center;">PRESETS:</span>
+          <span style="font-size:11px; font-weight:700; color:#8c98ba; align-self:center; margin-right:4px;">ПРЕСЕТЫ:</span>
           <div class="preset-chip active" id="chip-phonk" onclick="loadBeatPreset('phonk', this)">⚡ 8-BIT PHONK</div>
           <div class="preset-chip" onclick="loadBeatPreset('sicilian', this)">♟️ SICILIAN</div>
           <div class="preset-chip" onclick="loadBeatPreset('lofi', this)">☕ CHILL LOFI</div>
           <div class="preset-chip" onclick="loadBeatPreset('chaos', this)">🎲 RANDOM</div>
-          <div class="preset-chip" onclick="clearBeatBoard()">🧹 CLEAR</div>
+          <div class="preset-chip" onclick="clearBeatBoard()">🧹 ОЧИСТИТЬ</div>
         </div>
 
         <div class="beats-controls">
-          <button class="pixel-btn" id="bPlayBtn" style="padding:6px 12px; font-size:8px;">▶ PLAY</button>
-          <div style="display:flex; align-items:center; gap:6px; font-size:8px; color:#00e5ff;">
+          <button class="pixel-btn" id="bPlayBtn" style="padding:10px 18px; font-size:13px;">▶ СТАРТ</button>
+          <div style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:#00d2ff;">
             <span>BPM:</span>
-            <input type="range" id="bBpm" min="70" max="150" value="120" style="width:65px; accent-color:#ff0055;">
-            <span id="bBpmVal" style="color:#ffe600; width:24px;">120</span>
+            <input type="range" id="bBpm" min="70" max="150" value="120" style="width:75px; accent-color:#ff2a5f;">
+            <span id="bBpmVal" style="color:#ffc837; width:28px;">120</span>
           </div>
-          <button class="pixel-btn" id="bassBoostBtn" style="background:#281d3d; font-size:7px; padding:6px 8px;" onclick="toggleBassBoost()">
+          <button class="pixel-btn" id="bassBoostBtn" style="background:#20263a; border:1px solid #333c5a; font-size:12px; padding:10px 14px; box-shadow:none;" onclick="toggleBassBoost()">
             🔊 BASS: OFF
           </button>
         </div>
@@ -723,7 +985,7 @@
 
       <div class="slot-wrap">
         <div class="slot-machine-box">
-          <div style="font-size:8px; color:#ffe600; letter-spacing:1px; text-transform:uppercase;">
+          <div style="font-size:14px; font-weight:800; color:#ffc837; letter-spacing:1px; text-transform:uppercase;">
             СЛОТ-МАШИНА ОТМАЗОК
           </div>
 
@@ -742,8 +1004,8 @@
             </div>
           </div>
 
-          <button class="pixel-btn" onclick="spinExcuses()" style="background:#ffe600; color:#000; box-shadow:inset -2px -2px 0 #b3a100, inset 2px 2px 0 #fff, 3px 3px 0 #ff0055;">
-            SPIN / КРУТИТЬ
+          <button class="pixel-btn" onclick="spinExcuses()" style="background:linear-gradient(135deg, #ffc837 0%, #ff9800 100%); color:#0d0f18; font-size:15px; font-weight:900; box-shadow:0 4px 16px rgba(255, 200, 55, 0.4); margin-top:4px;">
+            🎰 КРУТИТЬ ОТМАЗКУ
           </button>
         </div>
       </div>
@@ -758,8 +1020,8 @@
       tg.ready();
       tg.expand();
       try {
-        tg.setHeaderColor('#08060c');
-        tg.setBackgroundColor('#08060c');
+        tg.setHeaderColor('#0d0f18');
+        tg.setBackgroundColor('#0d0f18');
       } catch(e) {}
     }
 
@@ -1044,34 +1306,46 @@
     }
 
     function drawSnakeGame() {
+      // Board chessboard grid
       for (let r = 0; r < GRID_SIZE; r++) {
         for (let c = 0; c < GRID_SIZE; c++) {
-          sctx.fillStyle = (r + c) % 2 === 0 ? '#261b3b' : '#140f21';
+          sctx.fillStyle = (r + c) % 2 === 0 ? '#1b2034' : '#111524';
           sctx.fillRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
       }
 
+      // Draw chess food piece
       if (snFood) {
-        sctx.fillStyle = '#ffe600';
-        sctx.font = `${Math.floor(CELL_SIZE * 0.85)}px sans-serif`;
+        sctx.fillStyle = '#ffc837';
+        sctx.font = `bold ${Math.floor(CELL_SIZE * 0.85)}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
         sctx.textAlign = 'center';
         sctx.textBaseline = 'middle';
+        sctx.shadowColor = 'rgba(255, 200, 55, 0.45)';
+        sctx.shadowBlur = 8;
         sctx.fillText(snFood.char, (snFood.x + 0.5) * CELL_SIZE, (snFood.y + 0.5) * CELL_SIZE);
+        sctx.shadowBlur = 0;
       }
 
+      // Draw snake segments
       snake.forEach((seg, index) => {
         if (index === 0) {
-          sctx.fillStyle = '#00ff66';
-          sctx.font = `${Math.floor(CELL_SIZE * 0.95)}px sans-serif`;
+          sctx.fillStyle = '#00e676';
+          sctx.font = `bold ${Math.floor(CELL_SIZE * 0.95)}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
           sctx.textAlign = 'center';
           sctx.textBaseline = 'middle';
+          sctx.shadowColor = 'rgba(0, 230, 118, 0.6)';
+          sctx.shadowBlur = 10;
           sctx.fillText('♞', (seg.x + 0.5) * CELL_SIZE, (seg.y + 0.5) * CELL_SIZE);
+          sctx.shadowBlur = 0;
         } else {
-          sctx.fillStyle = '#ff0055';
-          sctx.font = `${Math.floor(CELL_SIZE * 0.75)}px sans-serif`;
+          sctx.fillStyle = '#ff2a5f';
+          sctx.font = `bold ${Math.floor(CELL_SIZE * 0.8)}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
           sctx.textAlign = 'center';
           sctx.textBaseline = 'middle';
+          sctx.shadowColor = 'rgba(255, 42, 95, 0.4)';
+          sctx.shadowBlur = 5;
           sctx.fillText('♟', (seg.x + 0.5) * CELL_SIZE, (seg.y + 0.5) * CELL_SIZE);
+          sctx.shadowBlur = 0;
         }
       });
     }
