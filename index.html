@@ -51,7 +51,6 @@
       pointer-events: none;
     }
 
-    /* Pixel Frame Container */
     .hub-container {
       width: 100%;
       max-width: 600px;
@@ -65,7 +64,6 @@
       position: relative;
     }
 
-    /* Header */
     .header {
       text-align: center;
       margin-bottom: 14px;
@@ -128,11 +126,10 @@
       border: 2px solid #3c2a5c;
       padding: 8px 10px;
       font-family: 'Press Start 2P', monospace;
-      font-size: 9px;
+      font-size: 8px;
       text-transform: uppercase;
       cursor: pointer;
       box-shadow: inset -2px -2px 0 #0d0917, inset 2px 2px 0 #31234a, 2px 2px 0 #000;
-      transition: none;
     }
 
     .tab-btn.active {
@@ -154,7 +151,6 @@
       display: flex;
     }
 
-    /* Common Pixel Button */
     .pixel-btn {
       background: #ff0055;
       color: #ffffff;
@@ -174,9 +170,9 @@
     }
 
     /* ==============================================
-       MODULE 1: KNIGHT RUN (8-BIT)
+       MODULE 1: CHESS SNAKE (8-BIT)
     ============================================== */
-    .knight-game-wrap {
+    .snake-game-wrap {
       width: 100%;
       max-width: 440px;
       display: flex;
@@ -184,7 +180,7 @@
       align-items: center;
     }
 
-    .stats-bar {
+    .snake-stats {
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -197,62 +193,54 @@
 
     .stat-box { display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .stat-label { font-size: 7px; color: #76639c; text-transform: uppercase; }
-    .stat-val { font-size: 12px; color: #00ff66; text-shadow: 1px 1px 0 #000; }
+    .stat-val { font-size: 12px; color: #00ff66; }
 
-    .board-frame {
+    .canvas-frame {
       position: relative;
       width: 100%;
+      max-width: 380px;
       aspect-ratio: 1 / 1;
       border: 4px solid #ffe600;
-      background: #181226;
+      background: #151024;
       box-shadow: 0 0 0 2px #000, 4px 4px 0 #ff0055;
+      overflow: hidden;
     }
 
-    #knightBoard {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      grid-template-rows: repeat(8, 1fr);
+    #snakeCanvas {
       width: 100%;
       height: 100%;
+      display: block;
     }
 
-    .cell {
-      position: relative;
+    /* D-PAD FOR MOBILE CONTROLS */
+    .dpad-container {
+      display: grid;
+      grid-template-columns: 50px 50px 50px;
+      grid-template-rows: 50px 50px;
+      gap: 6px;
+      margin-top: 14px;
+      justify-content: center;
+    }
+
+    .dpad-btn {
+      background: #241a38;
+      border: 3px solid #3c2a5c;
+      color: #00e5ff;
+      font-size: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(20px, 5.5vw, 28px);
       cursor: pointer;
+      box-shadow: 2px 2px 0 #000;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    .cell.light { background: #2f2347; color: #fff; }
-    .cell.dark { background: #161024; color: #fff; }
-
-    .cell.valid::after {
-      content: '';
-      position: absolute;
-      width: 26%;
-      height: 26%;
-      background: #00ff66;
-      box-shadow: 0 0 6px #00ff66;
-    }
-
-    .cell.valid.target-cell::after {
-      width: 70%;
-      height: 70%;
-      background: transparent;
-      border: 3px dashed #ff0055;
-    }
-
-    .knight-piece {
-      filter: drop-shadow(2px 2px 0px #00e5ff);
-      z-index: 2;
-    }
-
-    .target-piece {
-      color: #ffe600;
-      filter: drop-shadow(2px 2px 0px #ff0055);
-      z-index: 1;
+    .dpad-btn:active {
+      background: #ff0055;
+      color: #fff;
+      border-color: #ffe600;
+      transform: translate(1px, 1px);
     }
 
     .overlay {
@@ -270,7 +258,7 @@
 
     .overlay.hidden { display: none; }
     .overlay h2 { font-size: 16px; color: #ff0055; margin-bottom: 8px; text-shadow: 2px 2px 0 #ffe600; }
-    .overlay p { font-family: 'VT323', monospace; font-size: 18px; color: #ede2cd; margin-bottom: 16px; line-height: 1.3; }
+    .overlay p { font-family: 'VT323', monospace; font-size: 19px; color: #ede2cd; margin-bottom: 16px; line-height: 1.3; }
 
     /* ==============================================
        MODULE 2: CHESS BEATS (8-BIT)
@@ -602,33 +590,42 @@
 
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
-      <button class="tab-btn active" id="tab-btn-run" onclick="switchTab('run', this)">♞ ПОБЕГ КОНЯ</button>
+      <button class="tab-btn active" id="tab-btn-run" onclick="switchTab('run', this)">🐍 ЗМЕЙКА</button>
       <button class="tab-btn" id="tab-btn-beats" onclick="switchTab('beats', this)">🎹 8-BIT BEATS</button>
       <button class="tab-btn" id="tab-btn-smasher" onclick="switchTab('smasher', this)">🔨 БОСС-ФЕРЗЬ</button>
       <button class="tab-btn" id="tab-btn-excuse" onclick="switchTab('excuse', this)">🎰 ОТМАЗКИ</button>
     </div>
 
-    <!-- TAB 1: KNIGHT RUN -->
+    <!-- TAB 1: CHESS SNAKE -->
     <div class="tab-pane active" id="pane-run">
-      <div class="knight-game-wrap">
-        <div class="stats-bar">
-          <div class="stat-box"><span class="stat-label">SCORE</span><span class="stat-val" id="kScore">0</span></div>
-          <div class="stat-box"><span class="stat-label">TIME</span><span class="stat-val" id="kTimer" style="color:#ffe600;">30s</span></div>
-          <div class="stat-box"><span class="stat-label">COMBO</span><span class="stat-val" id="kCombo" style="color:#00e5ff;">x1</span></div>
-          <div class="stat-box"><span class="stat-label">HI-SCORE</span><span class="stat-val" id="kBest" style="color:#ff0055;">0</span></div>
+      <div class="snake-game-wrap">
+        <div class="snake-stats">
+          <div class="stat-box"><span class="stat-label">SCORE</span><span class="stat-val" id="snScore">0</span></div>
+          <div class="stat-box"><span class="stat-label">LENGTH</span><span class="stat-val" id="snLength" style="color:#ffe600;">3</span></div>
+          <div class="stat-box"><span class="stat-label">HI-SCORE</span><span class="stat-val" id="snBest" style="color:#ff0055;">0</span></div>
         </div>
 
-        <div class="board-frame">
-          <div id="knightBoard"></div>
-          <div class="overlay" id="kOverlay">
-            <h2 id="kOverlayTitle">ПОБЕГ КОНЯ</h2>
-            <p id="kOverlayDesc">
-              Управляй черным конём ♞.<br>
-              Прыгай буквой «Г» и руби белые фигуры!<br>
-              Каждое взятие: +2 сек и рост комбо.
+        <div class="canvas-frame" id="canvasFrame">
+          <canvas id="snakeCanvas" width="360" height="360"></canvas>
+          <div class="overlay" id="snOverlay">
+            <h2 id="snOverlayTitle">ШАХМАТНАЯ ЗМЕЙКА</h2>
+            <p id="snOverlayDesc">
+              Голова - Конь ♞, тело - Пешки ♟.<br>
+              Кушай вражеские фигуры и расти!<br>
+              Не врезайся в стены и свой хвост.
             </p>
-            <button class="pixel-btn" id="kStartBtn">START GAME</button>
+            <button class="pixel-btn" id="snStartBtn">START GAME</button>
           </div>
+        </div>
+
+        <!-- Touch D-Pad for Mobile -->
+        <div class="dpad-container">
+          <div></div>
+          <div class="dpad-btn" onclick="setSnakeDir(0, -1)">▲</div>
+          <div></div>
+          <div class="dpad-btn" onclick="setSnakeDir(-1, 0)">◄</div>
+          <div class="dpad-btn" onclick="setSnakeDir(0, 1)">▼</div>
+          <div class="dpad-btn" onclick="setSnakeDir(1, 0)">►</div>
         </div>
       </div>
     </div>
@@ -782,7 +779,7 @@
 
     function shareHub() {
       tgHaptic('light');
-      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('👾 Зацени 8-битный ретро-шахматный хаб: биты, побег коня и босс-ферзь!');
+      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('👾 Зацени 8-битный ретро-шахматный хаб: шахматная змейка, биты и босс-ферзь!');
       if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
         window.Telegram.WebApp.openTelegramLink(shareUrl);
       } else {
@@ -886,177 +883,227 @@
       if (tabId !== 'beats' && isBeatPlaying) {
         stopBeats();
       }
+      if (tabId !== 'run' && snRunning) {
+        pauseSnake();
+      }
     }
 
     // ========================================================
-    // MODULE 1: KNIGHT RUN
+    // MODULE 1: CHESS SNAKE (8-BIT)
     // ========================================================
-    let kPos = { r: 4, c: 4 };
-    let kTargets = [];
-    let kScore = 0;
-    let kCombo = 1;
-    let kTime = 30;
-    let kBest = localStorage.getItem('k_best_8bit') || 0;
-    let kInterval = null;
-    let kRunning = false;
+    const snCanvas = document.getElementById('snakeCanvas');
+    const sctx = snCanvas.getContext('2d');
+    const GRID_SIZE = 14;
+    const CELL_SIZE = snCanvas.width / GRID_SIZE;
 
-    const kMoves = [
-      { r: -2, c: -1 }, { r: -2, c: 1 },
-      { r: -1, c: -2 }, { r: -1, c: 2 },
-      { r: 1, c: -2 },  { r: 1, c: 2 },
-      { r: 2, c: -1 },  { r: 2, c: 1 }
+    let snake = [];
+    let snDir = { x: 1, y: 0 };
+    let snNextDir = { x: 1, y: 0 };
+    let snFood = null;
+    let snScore = 0;
+    let snBest = localStorage.getItem('sn_best_chess') || 0;
+    let snRunning = false;
+    let snInterval = null;
+    let snSpeed = 130;
+
+    const snScoreEl = document.getElementById('snScore');
+    const snLengthEl = document.getElementById('snLength');
+    const snBestEl = document.getElementById('snBest');
+    const snOverlay = document.getElementById('snOverlay');
+    const snOverlayTitle = document.getElementById('snOverlayTitle');
+    const snOverlayDesc = document.getElementById('snOverlayDesc');
+    const snStartBtn = document.getElementById('snStartBtn');
+
+    snBestEl.textContent = snBest;
+
+    const chessFoodTypes = [
+      { char: '♙', points: 10, grow: 1 },
+      { char: '♘', points: 25, grow: 1 },
+      { char: '♗', points: 25, grow: 1 },
+      { char: '♖', points: 50, grow: 2 },
+      { char: '♕', points: 100, grow: 3 }
     ];
-    const kPieces = ['♙', '♘', '♗', '♖', '♕'];
 
-    const kBoard = document.getElementById('knightBoard');
-    const kScoreEl = document.getElementById('kScore');
-    const kTimerEl = document.getElementById('kTimer');
-    const kComboEl = document.getElementById('kCombo');
-    const kBestEl = document.getElementById('kBest');
-    const kOverlay = document.getElementById('kOverlay');
-    const kOverlayTitle = document.getElementById('kOverlayTitle');
-    const kOverlayDesc = document.getElementById('kOverlayDesc');
-    const kStartBtn = document.getElementById('kStartBtn');
-
-    kBestEl.textContent = kBest;
-
-    function buildKnightBoard() {
-      kBoard.innerHTML = '';
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const d = document.createElement('div');
-          d.className = `cell ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
-          d.addEventListener('click', () => onKnightCellClick(r, c));
-          kBoard.appendChild(d);
-        }
+    function spawnFood() {
+      let valid = false;
+      let pos = { x: 0, y: 0 };
+      while (!valid) {
+        pos.x = Math.floor(Math.random() * GRID_SIZE);
+        pos.y = Math.floor(Math.random() * GRID_SIZE);
+        valid = !snake.some(segment => segment.x === pos.x && segment.y === pos.y);
       }
+      const type = chessFoodTypes[Math.floor(Math.random() * chessFoodTypes.length)];
+      snFood = { x: pos.x, y: pos.y, ...type };
     }
 
-    function getKValids(pos) {
-      return kMoves.map(m => ({ r: pos.r + m.r, c: pos.c + m.c }))
-                   .filter(m => m.r >= 0 && m.r < 8 && m.c >= 0 && m.c < 8);
+    function initSnakeGame() {
+      snake = [
+        { x: 5, y: 7 },
+        { x: 4, y: 7 },
+        { x: 3, y: 7 }
+      ];
+      snDir = { x: 1, y: 0 };
+      snNextDir = { x: 1, y: 0 };
+      snScore = 0;
+      snSpeed = 130;
+      spawnFood();
+      updateSnakeStats();
+      drawSnakeGame();
     }
 
-    function renderKnight() {
-      document.querySelectorAll('#knightBoard .cell').forEach(c => {
-        c.innerHTML = '';
-        c.classList.remove('valid', 'target-cell');
-      });
-
-      kTargets.forEach(t => {
-        const cell = kBoard.children[t.r * 8 + t.c];
-        if (cell) {
-          const s = document.createElement('span');
-          s.className = 'target-piece';
-          s.textContent = t.char;
-          cell.appendChild(s);
-        }
-      });
-
-      const kc = kBoard.children[kPos.r * 8 + kPos.c];
-      if (kc) {
-        const k = document.createElement('span');
-        k.className = 'knight-piece';
-        k.textContent = '♞';
-        kc.appendChild(k);
-      }
-
-      if (kRunning) {
-        const valids = getKValids(kPos);
-        valids.forEach(m => {
-          const c = kBoard.children[m.r * 8 + m.c];
-          if (c) {
-            c.classList.add('valid');
-            if (kTargets.some(t => t.r === m.r && t.c === m.c)) {
-              c.classList.add('target-cell');
-            }
-          }
-        });
-      }
-
-      kScoreEl.textContent = kScore;
-      kTimerEl.textContent = `${kTime}s`;
-      kComboEl.textContent = `x${kCombo}`;
+    function setSnakeDir(x, y) {
+      if (!snRunning) return;
+      // Prevent reversing
+      if (x !== 0 && snDir.x !== 0) return;
+      if (y !== 0 && snDir.y !== 0) return;
+      snNextDir = { x, y };
+      tgHaptic('light');
     }
 
-    function onKnightCellClick(r, c) {
-      if (!kRunning) return;
-      const valids = getKValids(kPos);
-      if (!valids.some(m => m.r === r && m.c === c)) return;
+    function updateSnakeGame() {
+      snDir = { ...snNextDir };
+      const head = { x: snake[0].x + snDir.x, y: snake[0].y + snDir.y };
 
-      kPos = { r, c };
-      const idx = kTargets.findIndex(t => t.r === r && t.c === c);
-      if (idx !== -1) {
+      // Wall Collision
+      if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
+        return endSnakeGame();
+      }
+
+      // Self Collision
+      if (snake.some(seg => seg.x === head.x && seg.y === head.y)) {
+        return endSnakeGame();
+      }
+
+      snake.unshift(head);
+
+      // Check Eat Food
+      if (head.x === snFood.x && head.y === snFood.y) {
         tgHaptic('medium');
-        const hit = kTargets[idx];
-        kTargets.splice(idx, 1);
-        kScore += hit.points * kCombo;
-        kCombo++;
-        kTime += 2;
-        playTone(380 + Math.min(kCombo, 12) * 45, 'square', 0.09, 0.25);
-        spawnKTarget();
+        playTone(480 + Math.min(snake.length * 20, 600), 'square', 0.08, 0.25);
+        snScore += snFood.points;
+        // Growth handled by not popping tail
+        for (let i = 1; i < snFood.grow; i++) {
+          snake.push({ ...snake[snake.length - 1] });
+        }
+        spawnFood();
+        // Speed up slightly
+        if (snSpeed > 80) snSpeed -= 2;
+        clearInterval(snInterval);
+        snInterval = setInterval(updateSnakeGame, snSpeed);
       } else {
-        tgHaptic('light');
-        kCombo = 1;
-        playTone(220, 'square', 0.04, 0.15);
+        snake.pop();
       }
-      renderKnight();
+
+      updateSnakeStats();
+      drawSnakeGame();
     }
 
-    function spawnKTarget() {
-      while (kTargets.length < 3) {
-        const r = Math.floor(Math.random() * 8);
-        const c = Math.floor(Math.random() * 8);
-        if ((r === kPos.r && c === kPos.c) || kTargets.some(t => t.r === r && t.c === c)) continue;
-        const char = kPieces[Math.floor(Math.random() * kPieces.length)];
-        const points = char === '♕' ? 50 : char === '♖' ? 30 : 20;
-        kTargets.push({ r, c, char, points });
-      }
+    function updateSnakeStats() {
+      snScoreEl.textContent = snScore;
+      snLengthEl.textContent = snake.length;
     }
 
-    function startKnight() {
+    function drawSnakeGame() {
+      // Background checkered grid
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          sctx.fillStyle = (r + c) % 2 === 0 ? '#261b3b' : '#140f21';
+          sctx.fillRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        }
+      }
+
+      // Draw Food
+      if (snFood) {
+        sctx.fillStyle = '#ffe600';
+        sctx.font = `${Math.floor(CELL_SIZE * 0.85)}px sans-serif`;
+        sctx.textAlign = 'center';
+        sctx.textBaseline = 'middle';
+        sctx.fillText(snFood.char, (snFood.x + 0.5) * CELL_SIZE, (snFood.y + 0.5) * CELL_SIZE);
+      }
+
+      // Draw Snake
+      snake.forEach((seg, index) => {
+        if (index === 0) {
+          // Head: Black Knight ♞ with glow
+          sctx.fillStyle = '#00ff66';
+          sctx.font = `${Math.floor(CELL_SIZE * 0.95)}px sans-serif`;
+          sctx.textAlign = 'center';
+          sctx.textBaseline = 'middle';
+          sctx.fillText('♞', (seg.x + 0.5) * CELL_SIZE, (seg.y + 0.5) * CELL_SIZE);
+        } else {
+          // Body: Pawn ♟
+          sctx.fillStyle = '#ff0055';
+          sctx.font = `${Math.floor(CELL_SIZE * 0.75)}px sans-serif`;
+          sctx.textAlign = 'center';
+          sctx.textBaseline = 'middle';
+          sctx.fillText('♟', (seg.x + 0.5) * CELL_SIZE, (seg.y + 0.5) * CELL_SIZE);
+        }
+      });
+    }
+
+    function startSnakeGame() {
       ensureAudio();
       tgHaptic('medium');
-      kPos = { r: 4, c: 4 };
-      kTargets = [];
-      kScore = 0;
-      kCombo = 1;
-      kTime = 30;
-      kRunning = true;
-      kOverlay.classList.add('hidden');
-      spawnKTarget();
-      spawnKTarget();
-      renderKnight();
-
-      if (kInterval) clearInterval(kInterval);
-      kInterval = setInterval(() => {
-        kTime--;
-        if (kTime <= 0) endKnight();
-        renderKnight();
-      }, 1000);
+      initSnakeGame();
+      snRunning = true;
+      snOverlay.classList.add('hidden');
+      if (snInterval) clearInterval(snInterval);
+      snInterval = setInterval(updateSnakeGame, snSpeed);
     }
 
-    function endKnight() {
-      kRunning = false;
-      clearInterval(kInterval);
-      tgHaptic('error');
-      playTone(140, 'sawtooth', 0.35, 0.25);
+    function pauseSnake() {
+      snRunning = false;
+      clearInterval(snInterval);
+    }
 
-      if (kScore > kBest) {
-        kBest = kScore;
-        localStorage.setItem('k_best_8bit', kBest);
-        kBestEl.textContent = kBest;
+    function endSnakeGame() {
+      snRunning = false;
+      clearInterval(snInterval);
+      tgHaptic('error');
+      playTone(130, 'sawtooth', 0.4, 0.3);
+
+      if (snScore > snBest) {
+        snBest = snScore;
+        localStorage.setItem('sn_best_chess', snBest);
+        snBestEl.textContent = snBest;
       }
 
-      kOverlayTitle.textContent = 'GAME OVER';
-      kOverlayDesc.innerHTML = `SCORE: ${kScore} | COMBO: x${kCombo} | HI: ${kBest}`;
-      kStartBtn.textContent = 'TRY AGAIN';
-      kOverlay.classList.remove('hidden');
+      snOverlayTitle.textContent = 'GAME OVER';
+      snOverlayDesc.innerHTML = `СЧЕТ: ${snScore}<br>ДЛИНА: ${snake.length}<br>РЕКОРД: ${snBest}`;
+      snStartBtn.textContent = 'PLAY AGAIN';
+      snOverlay.classList.remove('hidden');
     }
 
-    kStartBtn.addEventListener('click', startKnight);
-    buildKnightBoard();
-    renderKnight();
+    snStartBtn.addEventListener('click', startSnakeGame);
+
+    // Keyboard Controls
+    window.addEventListener('keydown', (e) => {
+      if (['ArrowUp', 'KeyW'].includes(e.code)) setSnakeDir(0, -1);
+      else if (['ArrowDown', 'KeyS'].includes(e.code)) setSnakeDir(0, 1);
+      else if (['ArrowLeft', 'KeyA'].includes(e.code)) setSnakeDir(-1, 0);
+      else if (['ArrowRight', 'KeyD'].includes(e.code)) setSnakeDir(1, 0);
+    });
+
+    // Touch Swipe on Canvas
+    let touchStartX = 0, touchStartY = 0;
+    snCanvas.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    snCanvas.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 25) setSnakeDir(1, 0);
+        else if (dx < -25) setSnakeDir(-1, 0);
+      } else {
+        if (dy > 25) setSnakeDir(0, 1);
+        else if (dy < -25) setSnakeDir(0, -1);
+      }
+    }, { passive: true });
+
+    initSnakeGame();
 
     // ========================================================
     // MODULE 2: CHESS BEATS (8-BIT)
