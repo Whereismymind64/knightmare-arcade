@@ -38,7 +38,6 @@
       position: relative;
     }
 
-    /* Subtle CRT Scanline overlay */
     body::before {
       content: " ";
       display: block;
@@ -110,7 +109,6 @@
       box-shadow: 1px 1px 0 #ff0055;
     }
 
-    /* Pixel Nav Tabs */
     .nav-tabs {
       display: flex;
       flex-wrap: wrap;
@@ -169,9 +167,7 @@
       transform: translate(2px, 2px);
     }
 
-    /* ==============================================
-       MODULE 1: CHESS SNAKE (8-BIT)
-    ============================================== */
+    /* MODULE 1: CHESS SNAKE */
     .snake-game-wrap {
       width: 100%;
       max-width: 440px;
@@ -206,13 +202,8 @@
       overflow: hidden;
     }
 
-    #snakeCanvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
+    #snakeCanvas { width: 100%; height: 100%; display: block; }
 
-    /* D-PAD FOR MOBILE CONTROLS */
     .dpad-container {
       display: grid;
       grid-template-columns: 50px 50px 50px;
@@ -232,8 +223,6 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 2px 2px 0 #000;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     .dpad-btn:active {
@@ -260,121 +249,34 @@
     .overlay h2 { font-size: 16px; color: #ff0055; margin-bottom: 8px; text-shadow: 2px 2px 0 #ffe600; }
     .overlay p { font-family: 'VT323', monospace; font-size: 19px; color: #ede2cd; margin-bottom: 16px; line-height: 1.3; }
 
-    /* ==============================================
-       MODULE 2: CHESS BEATS (8-BIT)
-    ============================================== */
-    .beats-wrap {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
+    /* MODULE 2: CHESS BEATS */
+    .beats-wrap { width: 100%; display: flex; flex-direction: column; align-items: center; }
     .beats-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      width: 100%;
-      justify-content: space-between;
-      align-items: center;
-      background: #0d0917;
-      border: 3px solid #3c2a5c;
-      padding: 8px 10px;
-      margin-bottom: 10px;
-      box-shadow: 2px 2px 0 #000;
+      display: flex; flex-wrap: wrap; gap: 8px; width: 100%; justify-content: space-between; align-items: center;
+      background: #0d0917; border: 3px solid #3c2a5c; padding: 8px 10px; margin-bottom: 10px; box-shadow: 2px 2px 0 #000;
     }
-
-    .beats-presets {
-      display: flex;
-      gap: 5px;
-      width: 100%;
-      margin-bottom: 10px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
+    .beats-presets { display: flex; gap: 5px; width: 100%; margin-bottom: 10px; overflow-x: auto; padding-bottom: 4px; }
     .preset-chip {
-      background: #1f1730;
-      border: 2px solid #3c2a5c;
-      color: #9f8fc2;
-      font-size: 8px;
-      padding: 5px 8px;
-      cursor: pointer;
-      white-space: nowrap;
+      background: #1f1730; border: 2px solid #3c2a5c; color: #9f8fc2; font-size: 8px; padding: 5px 8px; cursor: pointer; white-space: nowrap;
     }
-
-    .preset-chip.active {
-      background: #ff0055;
-      color: #fff;
-      border-color: #ffe600;
-    }
-
-    .beats-grid-box {
-      display: flex;
-      width: 100%;
-      gap: 6px;
-    }
-
-    .tracks-sidebar {
-      display: grid;
-      grid-template-rows: repeat(8, 1fr);
-      gap: 2px;
-      width: 90px;
-      font-size: 7px;
-    }
-
-    .track-row-lbl {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 4px;
-      color: #00e5ff;
-    }
-
+    .preset-chip.active { background: #ff0055; color: #fff; border-color: #ffe600; }
+    .beats-grid-box { display: flex; width: 100%; gap: 6px; }
+    .tracks-sidebar { display: grid; grid-template-rows: repeat(8, 1fr); gap: 2px; width: 90px; font-size: 7px; }
+    .track-row-lbl { display: flex; align-items: center; justify-content: flex-end; gap: 4px; color: #00e5ff; }
     .track-row-lbl .icon { font-size: 13px; color: #ffe600; }
-
     .matrix-grid {
-      flex: 1;
-      aspect-ratio: 1 / 1;
-      border: 3px solid #3c2a5c;
-      background: #0d0917;
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      grid-template-rows: repeat(8, 1fr);
-      gap: 2px;
-      padding: 2px;
+      flex: 1; aspect-ratio: 1 / 1; border: 3px solid #3c2a5c; background: #0d0917; display: grid;
+      grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); gap: 2px; padding: 2px;
     }
-
-    .bpad {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(12px, 3.2vw, 16px);
-      cursor: pointer;
-    }
-
+    .bpad { display: flex; align-items: center; justify-content: center; font-size: clamp(12px, 3.2vw, 16px); cursor: pointer; }
     .bpad.light { background: #241b38; color: #533e7d; }
     .bpad.dark { background: #150f24; color: #3b2a59; }
-
-    .bpad.active {
-      background: #ff0055 !important;
-      color: #ffffff !important;
-      box-shadow: inset 2px 2px 0 #ff6699;
-    }
-
-    .bpad.playhead-col {
-      outline: 2px solid #00ff66;
-      background: rgba(0, 255, 102, 0.15) !important;
-    }
-
-    .bpad.active.playhead-hit {
-      background: #00ff66 !important;
-      color: #000 !important;
-      box-shadow: 0 0 12px #00ff66;
-    }
+    .bpad.active { background: #ff0055 !important; color: #ffffff !important; box-shadow: inset 2px 2px 0 #ff6699; }
+    .bpad.playhead-col { outline: 2px solid #00ff66; background: rgba(0, 255, 102, 0.15) !important; }
+    .bpad.active.playhead-hit { background: #00ff66 !important; color: #000 !important; box-shadow: 0 0 12px #00ff66; }
 
     /* ==============================================
-       MODULE 3: QUEEN SMASHER (8-BIT BOSS FIGHT)
+       MODULE 3: ROAD TO 3000 (HARDCORE ELO GRIND)
     ============================================== */
     .smasher-wrap {
       width: 100%;
@@ -383,6 +285,18 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
+    }
+
+    .target-banner {
+      width: 100%;
+      background: #1f1433;
+      border: 2px solid #ffe600;
+      padding: 6px;
+      font-size: 9px;
+      color: #ffe600;
+      margin-bottom: 8px;
+      box-shadow: 2px 2px 0 #000;
+      letter-spacing: 0.5px;
     }
 
     .smasher-stats {
@@ -424,13 +338,13 @@
     }
 
     .big-queen.hit {
-      transform: scale(1.15) rotate(5deg);
+      transform: scale(1.1) rotate(4deg);
       filter: drop-shadow(0 0 15px #00ff66);
       color: #00ff66;
     }
 
     .big-queen.crit {
-      transform: scale(1.25) rotate(-8deg);
+      transform: scale(1.2) rotate(-8deg);
       filter: drop-shadow(0 0 25px #ff0055);
       color: #ff0055;
     }
@@ -455,37 +369,37 @@
       height: 14px;
       background: #000;
       border: 2px solid #fff;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       box-shadow: 2px 2px 0 #ff0055;
     }
 
     .hp-bar-inner {
       height: 100%;
       width: 100%;
-      background: #00ff66;
-      transition: width 0.06s linear;
+      background: #ff0055;
+      transition: width 0.05s linear;
     }
 
     .floating-dmg {
       position: absolute;
       color: #ffe600;
       font-family: 'Press Start 2P', monospace;
-      font-size: 14px;
+      font-size: 13px;
       pointer-events: none;
-      animation: floatPixel 0.5s steps(6) forwards;
+      animation: floatPixel 0.45s steps(5) forwards;
       text-shadow: 2px 2px 0 #000;
       z-index: 4;
     }
 
     .floating-dmg.crit-dmg {
       color: #ff0055;
-      font-size: 18px;
+      font-size: 16px;
       text-shadow: 2px 2px 0 #ffe600;
     }
 
     @keyframes floatPixel {
       0% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-40px); }
+      100% { opacity: 0; transform: translateY(-35px); }
     }
 
     .combo-streak-bar {
@@ -496,6 +410,7 @@
       letter-spacing: 1px;
     }
 
+    /* Tight Upgrades Grid - only 2 hard-earned upgrades */
     .upgrades-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -506,77 +421,51 @@
     .upg-card {
       background: #171026;
       border: 2px solid #3c2a5c;
-      padding: 6px 8px;
+      padding: 8px 6px;
       cursor: pointer;
       text-align: left;
       box-shadow: 2px 2px 0 #000;
     }
 
     .upg-card:active { border-color: #ffe600; background: #291d45; }
-    .upg-title { font-size: 8px; color: #fff; }
-    .upg-cost { font-size: 7px; color: #ffe600; margin-top: 3px; }
+    .upg-title { font-size: 8px; color: #fff; line-height: 1.3; }
+    .upg-cost { font-size: 8px; color: #ffe600; margin-top: 4px; }
 
-    /* ==============================================
-       MODULE 4: SLOT MACHINE (8-BIT)
-    ============================================== */
-    .slot-wrap {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
+    /* Victory Modal 3000 ELO */
+    .win-modal {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(8, 6, 12, 0.97);
+      border: 4px solid #ffe600;
+      display: none;
       flex-direction: column;
       align-items: center;
-      text-align: center;
-    }
-
-    .slot-machine-box {
-      width: 100%;
-      background: #0d0917;
-      border: 4px solid #3c2a5c;
-      padding: 14px;
-      box-shadow: 0 0 0 2px #000, 4px 4px 0 #ff0055;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .reels-container { display: grid; grid-template-columns: 1fr; gap: 8px; }
-
-    .reel-card {
-      background: #19122a;
-      border: 2px solid #ff0055;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-height: 54px;
       justify-content: center;
-      box-shadow: 2px 2px 0 #000;
+      padding: 16px;
+      text-align: center;
+      z-index: 50;
     }
 
+    .win-modal.active { display: flex; animation: winPop 0.3s ease; }
+    @keyframes winPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+    /* MODULE 4: SLOT MACHINE */
+    .slot-wrap { width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .slot-machine-box {
+      width: 100%; background: #0d0917; border: 4px solid #3c2a5c; padding: 14px; box-shadow: 0 0 0 2px #000, 4px 4px 0 #ff0055;
+      display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;
+    }
+    .reels-container { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .reel-card {
+      background: #19122a; border: 2px solid #ff0055; padding: 8px; display: flex; flex-direction: column; gap: 4px;
+      min-height: 54px; justify-content: center; box-shadow: 2px 2px 0 #000;
+    }
     .reel-tag { font-size: 7px; color: #00e5ff; text-transform: uppercase; }
     .reel-text { font-family: 'VT323', monospace; font-size: 19px; color: #ede2cd; line-height: 1.2; }
-
-    .reel-card.rolling {
-      border-color: #ffe600;
-      color: #ffe600;
-      animation: shakePixel 0.1s steps(2) infinite;
-    }
-
-    @keyframes shakePixel {
-      0% { transform: translateY(-2px); }
-      100% { transform: translateY(2px); }
-    }
-
+    .reel-card.rolling { border-color: #ffe600; color: #ffe600; animation: shakePixel 0.1s steps(2) infinite; }
     .slot-actions { display: flex; gap: 6px; width: 100%; justify-content: center; flex-wrap: wrap; }
 
-    .footer {
-      margin-top: 16px;
-      font-size: 8px;
-      color: #635082;
-      text-align: center;
-      letter-spacing: 1px;
-    }
+    .footer { margin-top: 16px; font-size: 8px; color: #635082; text-align: center; letter-spacing: 1px; }
   </style>
 </head>
 <body>
@@ -590,14 +479,14 @@
 
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
-      <button class="tab-btn active" id="tab-btn-run" onclick="switchTab('run', this)">🐍 ЗМЕЙКА</button>
+      <button class="tab-btn" id="tab-btn-run" onclick="switchTab('run', this)">🐍 ЗМЕЙКА</button>
+      <button class="tab-btn active" id="tab-btn-smasher" onclick="switchTab('smasher', this)">🏆 ПУТЬ К 3000</button>
       <button class="tab-btn" id="tab-btn-beats" onclick="switchTab('beats', this)">🎹 8-BIT BEATS</button>
-      <button class="tab-btn" id="tab-btn-smasher" onclick="switchTab('smasher', this)">🔨 БОСС-ФЕРЗЬ</button>
       <button class="tab-btn" id="tab-btn-excuse" onclick="switchTab('excuse', this)">🎰 ОТМАЗКИ</button>
     </div>
 
     <!-- TAB 1: CHESS SNAKE -->
-    <div class="tab-pane active" id="pane-run">
+    <div class="tab-pane" id="pane-run">
       <div class="snake-game-wrap">
         <div class="snake-stats">
           <div class="stat-box"><span class="stat-label">SCORE</span><span class="stat-val" id="snScore">0</span></div>
@@ -618,7 +507,6 @@
           </div>
         </div>
 
-        <!-- Touch D-Pad for Mobile -->
         <div class="dpad-container">
           <div></div>
           <div class="dpad-btn" onclick="setSnakeDir(0, -1)">▲</div>
@@ -630,7 +518,66 @@
       </div>
     </div>
 
-    <!-- TAB 2: CHESS BEATS -->
+    <!-- TAB 2: ROAD TO 3000 (HARDCORE ELO GRINDER) -->
+    <div class="tab-pane active" id="pane-smasher">
+      <div class="smasher-wrap">
+        <div class="target-banner">
+          ЦЕЛЬ: 3000 ELO // ПРЕВЗОЙДИ МАГНУСА (2882)!
+        </div>
+
+        <div class="smasher-stats">
+          <div><div style="font-size:7px; color:#76639c;">ELO РЕЙТИНГ</div><div id="smElo" style="font-size:15px; color:#ffe600;">1000</div></div>
+          <div><div style="font-size:7px; color:#76639c;">СОПЕРНИК</div><div id="smBossName" style="font-size:9px; color:#00e5ff;">Любитель 1000</div></div>
+          <div><div style="font-size:7px; color:#76639c;">DMG/CLICK</div><div id="smDmg" style="font-size:15px; color:#ff0055;">1</div></div>
+        </div>
+
+        <div class="combo-streak-bar" id="smStreakText">КЛИКАЙ БЫСТРЕЕ: СТРИК x1.0</div>
+
+        <div style="width:100%; display:flex; justify-content:space-between; font-size:7px; margin-bottom:4px; color:#76639c;">
+          <span>HP СОПЕРНИКА:</span>
+          <span id="smHpText">150 / 150</span>
+        </div>
+        <div class="hp-bar-outer">
+          <div class="hp-bar-inner" id="smHpBar"></div>
+        </div>
+
+        <div class="queen-stage" id="smStage" onclick="smashQueen(event)">
+          <div class="toxic-bubble" id="toxicBubble" style="display:none;">ЛАКЕР!</div>
+          <div class="big-queen" id="smQueenIcon">♙</div>
+        </div>
+
+        <!-- Only 2 hard-earned upgrades -->
+        <div class="upgrades-grid">
+          <div class="upg-card" onclick="buyUpg('fork')">
+            <div class="upg-title">♞ Тактический Удар (+1 DMG)</div>
+            <div class="upg-cost" id="upgCostFork">250 ELO</div>
+          </div>
+          <div class="upg-card" onclick="buyUpg('berserk')">
+            <div class="upg-title">⚡ Блиц-Берсерк (x1.5 к клику)</div>
+            <div class="upg-cost" id="upgCostBer">800 ELO</div>
+          </div>
+        </div>
+
+        <!-- 3000 ELO VICTORY MODAL -->
+        <div class="win-modal" id="winModal">
+          <h2 style="font-size:16px; color:#ffe600; text-shadow:2px 2px 0 #ff0055; margin-bottom:12px;">
+            🏆 3000 ELO ДОСТИГНУТО!
+          </h2>
+          <p style="font-family:'VT323',monospace; font-size:22px; color:#ede2cd; line-height:1.3; margin-bottom:16px;">
+            ТЫ ПРЕВЗОЙШЕЛ МАГНУСА КАРЛСЕНА (2882)!<br>
+            ТЫ АБСОЛЮТНЫЙ БОГ ШАХМАТНОГО ГРИНДА.
+          </p>
+          <button class="pixel-btn" onclick="shareVictory()" style="background:#ffe600; color:#000; margin-bottom:10px;">
+            📤 ПОХВАСТАТЬСЯ В TG
+          </button>
+          <button class="pixel-btn" onclick="closeWinModal()" style="background:#1f1730; font-size:8px;">
+            ПРОДОЛЖИТЬ ИГРУ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CHESS BEATS -->
     <div class="tab-pane" id="pane-beats">
       <div class="beats-wrap">
         <div class="beats-presets">
@@ -657,51 +604,6 @@
         <div class="beats-grid-box">
           <div class="tracks-sidebar" id="bTracks"></div>
           <div class="matrix-grid" id="bGrid"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 3: QUEEN SMASHER (BOSS FIGHT) -->
-    <div class="tab-pane" id="pane-smasher">
-      <div class="smasher-wrap">
-        <div class="smasher-stats">
-          <div><div style="font-size:7px; color:#76639c;">ELO SCORE</div><div id="smElo" style="font-size:14px; color:#ffe600;">1200</div></div>
-          <div><div style="font-size:7px; color:#76639c;">BOSS</div><div id="smBossName" style="font-size:9px; color:#00e5ff;">Ферзь-Зевун</div></div>
-          <div><div style="font-size:7px; color:#76639c;">DMG</div><div id="smDmg" style="font-size:14px; color:#ff0055;">10</div></div>
-        </div>
-
-        <div class="combo-streak-bar" id="smStreakText">КЛИКАЙ БЫСТРЕЕ: СТРИК x1.0</div>
-
-        <div style="width:100%; display:flex; justify-content:space-between; font-size:7px; margin-bottom:4px; color:#76639c;">
-          <span>BOSS HP:</span>
-          <span id="smHpText">100 / 100</span>
-        </div>
-        <div class="hp-bar-outer">
-          <div class="hp-bar-inner" id="smHpBar"></div>
-        </div>
-
-        <div class="queen-stage" id="smStage" onclick="smashQueen(event)">
-          <div class="toxic-bubble" id="toxicBubble" style="display:none;">ЛАКЕР!</div>
-          <div class="big-queen" id="smQueenIcon">♕</div>
-        </div>
-
-        <div class="upgrades-grid">
-          <div class="upg-card" onclick="buyUpg('fork')">
-            <div class="upg-title">♞ Вилка (+15 DMG)</div>
-            <div class="upg-cost" id="upgCostFork">80 ELO</div>
-          </div>
-          <div class="upg-card" onclick="buyUpg('battery')">
-            <div class="upg-title">♜ Батарея (+45 DMG)</div>
-            <div class="upg-cost" id="upgCostBat">250 ELO</div>
-          </div>
-          <div class="upg-card" onclick="buyUpg('autoPawn')">
-            <div class="upg-title">♟ Авто-Пехота (+25/s)</div>
-            <div class="upg-cost" id="upgCostAuto">150 ELO</div>
-          </div>
-          <div class="upg-card" onclick="buyUpg('berserk')">
-            <div class="upg-title">⚡ БЕРСЕРК (x2 DMG)</div>
-            <div class="upg-cost" id="upgCostBer">500 ELO</div>
-          </div>
         </div>
       </div>
     </div>
@@ -779,7 +681,17 @@
 
     function shareHub() {
       tgHaptic('light');
-      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('👾 Зацени 8-битный ретро-шахматный хаб: шахматная змейка, биты и босс-ферзь!');
+      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('👾 Зацени 8-битный ретро-шахматный хаб: путь к 3000 Elo, змейка и биты!');
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
+        window.Telegram.WebApp.openTelegramLink(shareUrl);
+      } else {
+        window.open(shareUrl, '_blank');
+      }
+    }
+
+    function shareVictory() {
+      tgHaptic('success');
+      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent('🏆 Я набрал 3000 ELO в WhereIsMyMind и превзошел рекорд Магнуса Карлсена (2882)!');
       if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
         window.Telegram.WebApp.openTelegramLink(shareUrl);
       } else {
@@ -867,7 +779,6 @@
       osc.stop(actx.currentTime + 0.12);
     }
 
-    // --- TAB SWITCHING ---
     function switchTab(tabId, el) {
       ensureAudio();
       tgHaptic('light');
@@ -880,12 +791,8 @@
       const pane = document.getElementById(`pane-${tabId}`);
       if (pane) pane.classList.add('active');
 
-      if (tabId !== 'beats' && isBeatPlaying) {
-        stopBeats();
-      }
-      if (tabId !== 'run' && snRunning) {
-        pauseSnake();
-      }
+      if (tabId !== 'beats' && isBeatPlaying) stopBeats();
+      if (tabId !== 'run' && snRunning) pauseSnake();
     }
 
     // ========================================================
@@ -953,7 +860,6 @@
 
     function setSnakeDir(x, y) {
       if (!snRunning) return;
-      // Prevent reversing
       if (x !== 0 && snDir.x !== 0) return;
       if (y !== 0 && snDir.y !== 0) return;
       snNextDir = { x, y };
@@ -964,29 +870,23 @@
       snDir = { ...snNextDir };
       const head = { x: snake[0].x + snDir.x, y: snake[0].y + snDir.y };
 
-      // Wall Collision
       if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
         return endSnakeGame();
       }
-
-      // Self Collision
       if (snake.some(seg => seg.x === head.x && seg.y === head.y)) {
         return endSnakeGame();
       }
 
       snake.unshift(head);
 
-      // Check Eat Food
       if (head.x === snFood.x && head.y === snFood.y) {
         tgHaptic('medium');
         playTone(480 + Math.min(snake.length * 20, 600), 'square', 0.08, 0.25);
         snScore += snFood.points;
-        // Growth handled by not popping tail
         for (let i = 1; i < snFood.grow; i++) {
           snake.push({ ...snake[snake.length - 1] });
         }
         spawnFood();
-        // Speed up slightly
         if (snSpeed > 80) snSpeed -= 2;
         clearInterval(snInterval);
         snInterval = setInterval(updateSnakeGame, snSpeed);
@@ -1004,7 +904,6 @@
     }
 
     function drawSnakeGame() {
-      // Background checkered grid
       for (let r = 0; r < GRID_SIZE; r++) {
         for (let c = 0; c < GRID_SIZE; c++) {
           sctx.fillStyle = (r + c) % 2 === 0 ? '#261b3b' : '#140f21';
@@ -1012,7 +911,6 @@
         }
       }
 
-      // Draw Food
       if (snFood) {
         sctx.fillStyle = '#ffe600';
         sctx.font = `${Math.floor(CELL_SIZE * 0.85)}px sans-serif`;
@@ -1021,17 +919,14 @@
         sctx.fillText(snFood.char, (snFood.x + 0.5) * CELL_SIZE, (snFood.y + 0.5) * CELL_SIZE);
       }
 
-      // Draw Snake
       snake.forEach((seg, index) => {
         if (index === 0) {
-          // Head: Black Knight ♞ with glow
           sctx.fillStyle = '#00ff66';
           sctx.font = `${Math.floor(CELL_SIZE * 0.95)}px sans-serif`;
           sctx.textAlign = 'center';
           sctx.textBaseline = 'middle';
           sctx.fillText('♞', (seg.x + 0.5) * CELL_SIZE, (seg.y + 0.5) * CELL_SIZE);
         } else {
-          // Body: Pawn ♟
           sctx.fillStyle = '#ff0055';
           sctx.font = `${Math.floor(CELL_SIZE * 0.75)}px sans-serif`;
           sctx.textAlign = 'center';
@@ -1076,7 +971,6 @@
 
     snStartBtn.addEventListener('click', startSnakeGame);
 
-    // Keyboard Controls
     window.addEventListener('keydown', (e) => {
       if (['ArrowUp', 'KeyW'].includes(e.code)) setSnakeDir(0, -1);
       else if (['ArrowDown', 'KeyS'].includes(e.code)) setSnakeDir(0, 1);
@@ -1084,7 +978,6 @@
       else if (['ArrowRight', 'KeyD'].includes(e.code)) setSnakeDir(1, 0);
     });
 
-    // Touch Swipe on Canvas
     let touchStartX = 0, touchStartY = 0;
     snCanvas.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
@@ -1106,7 +999,186 @@
     initSnakeGame();
 
     // ========================================================
-    // MODULE 2: CHESS BEATS (8-BIT)
+    // MODULE 2: ROAD TO 3000 (HARDCORE BALANCED ELO GRIND)
+    // ========================================================
+    let smElo = parseInt(localStorage.getItem('sm_grind_elo')) || 1000;
+    let smBaseDmg = 1; // Pure 1 dmg per click
+    let smBonusDmg = parseInt(localStorage.getItem('sm_bonus_dmg')) || 0;
+    let smMultiplier = parseFloat(localStorage.getItem('sm_mult')) || 1.0;
+
+    let smCurHp = 150;
+    let smMaxHp = 150;
+    let smBossIndex = 0;
+    let smClickStreak = 0;
+    let smStreakTimer = null;
+    let hasWon = false;
+
+    // Hardcore boss ladder to 3000
+    const smBosses = [
+      { name: 'Любитель 1000', hp: 150, icon: '♙' },
+      { name: 'Студент Клуба 1400', hp: 350, icon: '♘' },
+      { name: 'Кандидат в Мастера 2000', hp: 750, icon: '♗' },
+      { name: 'Гроссмейстер 2500', hp: 1400, icon: '♜' },
+      { name: 'Магнус Карлсен 2882', hp: 2200, icon: '♚' },
+      { name: 'Stockfish God 3000', hp: 3200, icon: '♕' }
+    ];
+
+    const smCosts = {
+      fork: parseInt(localStorage.getItem('sm_cost_fork')) || 250,
+      berserk: parseInt(localStorage.getItem('sm_cost_ber')) || 800
+    };
+
+    const toxicQuotes = [
+      'МИСКЛИК!', 'ЛАКЕР!', 'РЕВАНШ!', 'ЦЕЙТНОТ!', 'СТОКФИШ НЕ ВЕРИТ!'
+    ];
+
+    function smashQueen(e) {
+      ensureAudio();
+
+      smClickStreak++;
+      clearTimeout(smStreakTimer);
+      smStreakTimer = setTimeout(() => {
+        smClickStreak = 0;
+        updateStreakUI();
+      }, 550);
+
+      const streakMult = smClickStreak > 20 ? 1.5 : smClickStreak > 10 ? 1.25 : 1.0;
+      updateStreakUI();
+
+      // Rare crit (10% chance)
+      const isCrit = Math.random() < 0.10;
+      const critBonus = isCrit ? 2 : 0;
+      playBonk(isCrit);
+
+      if (isCrit) tgHaptic('heavy');
+      else tgHaptic('medium');
+
+      // Hardcore low damage math: exactly 1-3 dmg per click!
+      const totalDmg = Math.max(1, Math.floor((smBaseDmg + smBonusDmg + critBonus) * smMultiplier * streakMult));
+      smCurHp -= totalDmg;
+      
+      // ELO increases slowly (1 ELO per click!)
+      smElo += totalDmg;
+      saveGrindProgress();
+
+      // Check 3000 ELO Victory!
+      if (smElo >= 3000 && !hasWon) {
+        triggerVictory();
+      }
+
+      // Visual reaction
+      const icon = document.getElementById('smQueenIcon');
+      icon.classList.remove('hit', 'crit');
+      void icon.offsetWidth;
+      icon.classList.add(isCrit ? 'crit' : 'hit');
+      setTimeout(() => icon.classList.remove('hit', 'crit'), 100);
+
+      if (Math.random() < 0.15) showToxicBubble();
+
+      // Floating text
+      const stage = document.getElementById('smStage');
+      const floatEl = document.createElement('div');
+      floatEl.className = `floating-dmg ${isCrit ? 'crit-dmg' : ''}`;
+      floatEl.textContent = isCrit ? `CRIT! -${totalDmg}` : `-${totalDmg}`;
+      const rect = stage.getBoundingClientRect();
+      floatEl.style.left = `${(e.clientX - rect.left) - 20}px`;
+      floatEl.style.top = `${(e.clientY - rect.top) - 15}px`;
+      stage.appendChild(floatEl);
+      setTimeout(() => floatEl.remove(), 450);
+
+      // Check Boss Defeated
+      if (smCurHp <= 0) {
+        tgHaptic('success');
+        playTone(660, 'square', 0.2, 0.35);
+        smElo += 50; // Bonus ELO for beating boss
+        smBossIndex = (smBossIndex + 1) % smBosses.length;
+        smMaxHp = smBosses[smBossIndex].hp;
+        smCurHp = smMaxHp;
+      }
+
+      updateSmasherUI();
+    }
+
+    function triggerVictory() {
+      hasWon = true;
+      tgHaptic('success');
+      playTone(880, 'square', 0.4, 0.4);
+      setTimeout(() => playTone(1174, 'square', 0.5, 0.4), 250);
+      document.getElementById('winModal').classList.add('active');
+    }
+
+    function closeWinModal() {
+      document.getElementById('winModal').classList.remove('active');
+    }
+
+    function showToxicBubble() {
+      const b = document.getElementById('toxicBubble');
+      b.textContent = toxicQuotes[Math.floor(Math.random() * toxicQuotes.length)];
+      b.style.display = 'block';
+      setTimeout(() => b.style.display = 'none', 700);
+    }
+
+    function updateStreakUI() {
+      const el = document.getElementById('smStreakText');
+      if (smClickStreak > 20) {
+        el.textContent = '🔥 СТРИК-СПРИНТ: x1.5 УРОН!';
+        el.style.color = '#ff0055';
+      } else if (smClickStreak > 10) {
+        el.textContent = '⚡ РАЗГОН: x1.25 УРОН';
+        el.style.color = '#ffe600';
+      } else {
+        el.textContent = 'КЛИКАЙ БЫСТРЕЕ: СТРИК x1.0';
+        el.style.color = '#76639c';
+      }
+    }
+
+    function buyUpg(type) {
+      ensureAudio();
+      const cost = smCosts[type];
+      if (smElo >= cost) {
+        tgHaptic('success');
+        smElo -= cost;
+        playTone(520, 'square', 0.12, 0.2);
+        if (type === 'fork') {
+          smBonusDmg += 1;
+          smCosts.fork = Math.floor(smCosts.fork * 1.8);
+        }
+        if (type === 'berserk') {
+          smMultiplier = parseFloat((smMultiplier * 1.5).toFixed(1));
+          smCosts.berserk = Math.floor(smCosts.berserk * 2.2);
+        }
+        saveGrindProgress();
+        updateSmasherUI();
+      } else {
+        tgHaptic('error');
+        playTone(140, 'sawtooth', 0.12, 0.2);
+      }
+    }
+
+    function saveGrindProgress() {
+      localStorage.setItem('sm_grind_elo', smElo);
+      localStorage.setItem('sm_bonus_dmg', smBonusDmg);
+      localStorage.setItem('sm_mult', smMultiplier);
+      localStorage.setItem('sm_cost_fork', smCosts.fork);
+      localStorage.setItem('sm_cost_ber', smCosts.berserk);
+    }
+
+    function updateSmasherUI() {
+      document.getElementById('smElo').textContent = smElo;
+      document.getElementById('smDmg').textContent = Math.floor((smBaseDmg + smBonusDmg) * smMultiplier);
+      document.getElementById('smBossName').textContent = smBosses[smBossIndex].name;
+      document.getElementById('smQueenIcon').textContent = smBosses[smBossIndex].icon;
+      document.getElementById('smHpText').textContent = `${Math.max(0, smCurHp)} / ${smMaxHp}`;
+      document.getElementById('smHpBar').style.width = `${Math.max(0, (smCurHp / smMaxHp) * 100)}%`;
+
+      document.getElementById('upgCostFork').textContent = `${smCosts.fork} ELO`;
+      document.getElementById('upgCostBer').textContent = `${smCosts.berserk} ELO`;
+    }
+
+    updateSmasherUI();
+
+    // ========================================================
+    // MODULE 3: CHESS BEATS (8-BIT)
     // ========================================================
     function playKick(t) {
       const o = actx.createOscillator(), g = actx.createGain();
@@ -1332,159 +1404,6 @@
     loadBeatPreset('phonk', document.getElementById('chip-phonk'));
 
     // ========================================================
-    // MODULE 3: QUEEN SMASHER PRO + 8-BIT BOSS FIGHT
-    // ========================================================
-    let smElo = 1200;
-    let smDmgVal = 10;
-    let smMaxHp = 100;
-    let smCurHp = 100;
-    let smBossIndex = 0;
-    let smAutoDmg = 0;
-    let smMultiplier = 1;
-    let smClickStreak = 0;
-    let smStreakTimer = null;
-
-    const smBosses = [
-      { name: 'Ферзь-Зевун', hp: 100, icon: '♕' },
-      { name: 'Токсичный Бот 1400', hp: 280, icon: '♕' },
-      { name: 'Ханс Ниманн с подсказками', hp: 700, icon: '♛' },
-      { name: 'Гроссмейстер в Тильте', hp: 1800, icon: '♛' },
-      { name: 'Stockfish 16 (Босс Вселенной)', hp: 4500, icon: '👑' }
-    ];
-
-    const toxicQuotes = [
-      'ЛАКЕР!', 'МИСКЛИК!', 'ТЫ ЧИТЕР!', 'РЕВАНШ ДАВАЙ!',
-      'Я ПРОСТО ЗЕВНУЛ!', 'НЕ ЧЕСТНО!', 'БОНГКЛАУД ВПЕРЕД!', 'ФЛАГ УРОНИШЬ!'
-    ];
-
-    const smCosts = { fork: 80, battery: 250, autoPawn: 150, berserk: 500 };
-
-    function smashQueen(e) {
-      ensureAudio();
-
-      smClickStreak++;
-      clearTimeout(smStreakTimer);
-      smStreakTimer = setTimeout(() => {
-        smClickStreak = 0;
-        updateStreakUI();
-      }, 700);
-
-      const streakMult = smClickStreak > 15 ? 2.5 : smClickStreak > 8 ? 1.6 : smClickStreak > 3 ? 1.2 : 1.0;
-      updateStreakUI();
-
-      const isCrit = Math.random() < 0.18;
-      const critMult = isCrit ? 2.5 : 1.0;
-      playBonk(isCrit);
-
-      if (isCrit) tgHaptic('heavy');
-      else tgHaptic('medium');
-
-      const totalDmg = Math.floor(smDmgVal * smMultiplier * streakMult * critMult);
-      smCurHp -= totalDmg;
-      smElo += Math.floor(totalDmg / 2);
-
-      const icon = document.getElementById('smQueenIcon');
-      icon.classList.remove('hit', 'crit');
-      void icon.offsetWidth;
-      icon.classList.add(isCrit ? 'crit' : 'hit');
-      setTimeout(() => icon.classList.remove('hit', 'crit'), 120);
-
-      if (Math.random() < 0.25) showToxicBubble();
-
-      const stage = document.getElementById('smStage');
-      const floatEl = document.createElement('div');
-      floatEl.className = `floating-dmg ${isCrit ? 'crit-dmg' : ''}`;
-      floatEl.textContent = isCrit ? `CRIT! -${totalDmg}` : `-${totalDmg}`;
-      const rect = stage.getBoundingClientRect();
-      floatEl.style.left = `${(e.clientX - rect.left) - 25}px`;
-      floatEl.style.top = `${(e.clientY - rect.top) - 15}px`;
-      stage.appendChild(floatEl);
-      setTimeout(() => floatEl.remove(), 500);
-
-      if (smCurHp <= 0) {
-        tgHaptic('success');
-        playTone(660, 'square', 0.25, 0.35);
-        smElo += 250;
-        smBossIndex = (smBossIndex + 1) % smBosses.length;
-        smMaxHp = smBosses[smBossIndex].hp;
-        smCurHp = smMaxHp;
-      }
-
-      updateSmasherUI();
-    }
-
-    function showToxicBubble() {
-      const b = document.getElementById('toxicBubble');
-      b.textContent = toxicQuotes[Math.floor(Math.random() * toxicQuotes.length)];
-      b.style.display = 'block';
-      setTimeout(() => b.style.display = 'none', 900);
-    }
-
-    function updateStreakUI() {
-      const el = document.getElementById('smStreakText');
-      if (smClickStreak > 15) {
-        el.textContent = '⚡ ULTRA FRENZY! x2.5 DMG!';
-        el.style.color = '#ff0055';
-      } else if (smClickStreak > 8) {
-        el.textContent = '🔥 SPEED STREAK: x1.6 DMG';
-        el.style.color = '#ffe600';
-      } else if (smClickStreak > 3) {
-        el.textContent = '⚡ COMBO: x1.2 DMG';
-        el.style.color = '#00ff66';
-      } else {
-        el.textContent = 'КЛИКАЙ БЫСТРЕЕ: СТРИК x1.0';
-        el.style.color = '#76639c';
-      }
-    }
-
-    function buyUpg(type) {
-      ensureAudio();
-      const cost = smCosts[type];
-      if (smElo >= cost) {
-        tgHaptic('success');
-        smElo -= cost;
-        playTone(520, 'square', 0.12, 0.2);
-        if (type === 'fork') { smDmgVal += 15; smCosts.fork = Math.floor(smCosts.fork * 1.5); }
-        if (type === 'battery') { smDmgVal += 45; smCosts.battery = Math.floor(smCosts.battery * 1.6); }
-        if (type === 'autoPawn') { smAutoDmg += 25; smCosts.autoPawn = Math.floor(smCosts.autoPawn * 1.5); }
-        if (type === 'berserk') { smMultiplier *= 2; smCosts.berserk = Math.floor(smCosts.berserk * 2.5); }
-        updateSmasherUI();
-      } else {
-        tgHaptic('error');
-        playTone(140, 'sawtooth', 0.12, 0.2);
-      }
-    }
-
-    function updateSmasherUI() {
-      document.getElementById('smElo').textContent = smElo;
-      document.getElementById('smDmg').textContent = smDmgVal * smMultiplier;
-      document.getElementById('smBossName').textContent = smBosses[smBossIndex].name;
-      document.getElementById('smQueenIcon').textContent = smBosses[smBossIndex].icon;
-      document.getElementById('smHpText').textContent = `${Math.max(0, smCurHp)} / ${smMaxHp}`;
-      document.getElementById('smHpBar').style.width = `${Math.max(0, (smCurHp / smMaxHp) * 100)}%`;
-
-      document.getElementById('upgCostFork').textContent = `${smCosts.fork} ELO`;
-      document.getElementById('upgCostBat').textContent = `${smCosts.battery} ELO`;
-      document.getElementById('upgCostAuto').textContent = `${smCosts.autoPawn} ELO`;
-      document.getElementById('upgCostBer').textContent = `${smCosts.berserk} ELO`;
-    }
-
-    setInterval(() => {
-      if (smAutoDmg > 0) {
-        smCurHp -= smAutoDmg;
-        smElo += Math.floor(smAutoDmg / 4);
-        if (smCurHp <= 0) {
-          tgHaptic('success');
-          smElo += 250;
-          smBossIndex = (smBossIndex + 1) % smBosses.length;
-          smMaxHp = smBosses[smBossIndex].hp;
-          smCurHp = smMaxHp;
-        }
-        updateSmasherUI();
-      }
-    }, 1000);
-
-    // ========================================================
     // MODULE 4: SLOT MACHINE (8-BIT)
     // ========================================================
     const excuses1 = [
@@ -1567,8 +1486,6 @@
         window.speechSynthesis.speak(utter);
       }
     }
-
-    updateSmasherUI();
   </script>
 </body>
 </html>
